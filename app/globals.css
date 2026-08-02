@@ -1,26 +1,192 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root,
+.dark {
+  --background: #060606;
+  --foreground: #f5f5f5;
+  --card: #131313;
+  --card-foreground: #f5f5f5;
+  --popover: #131313;
+  --popover-foreground: #f5f5f5;
+  --primary: #e6123c;
+  --primary-foreground: #ffffff;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #f5f5f5;
+  --muted: #1a1a1a;
+  --muted-foreground: #a3a3a3;
+  --accent: #1f1f1f;
+  --accent-foreground: #f5f5f5;
+  --destructive: #ff3b30;
+  --destructive-foreground: #ffffff;
+  --border: rgb(255 255 255 / 10%);
+  --input: rgb(255 255 255 / 15%);
+  --ring: #e6123c;
+  --chart-1: #e6123c;
+  --chart-2: #ff5c77;
+  --chart-3: #ff8fa3;
+  --chart-4: #b8102f;
+  --chart-5: #7a0a20;
+  --radius: 1rem;
+  --sidebar: #131313;
+  --sidebar-foreground: #f5f5f5;
+  --sidebar-primary: #e6123c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1f1f1f;
+  --sidebar-accent-foreground: #f5f5f5;
+  --sidebar-border: rgb(255 255 255 / 10%);
+  --sidebar-ring: #e6123c;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* YasLoader — tela de carregamento com "YAS" preenchendo de baixo pra cima */
+.yas-loader-letter {
+  position: relative;
+  display: inline-block;
+}
+
+.yas-loader-letter-base {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(255 255 255 / 18%);
+}
+
+.yas-loader-letter-fill {
+  position: absolute;
+  inset: 0;
+  color: var(--primary);
+  clip-path: inset(100% 0 0 0);
+  animation: yas-loader-fill 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes yas-loader-fill {
+  to {
+    clip-path: inset(0% 0 0 0);
+  }
+}
+
+.yas-loader-pulse {
+  animation: yas-loader-pulse 1.6s ease-in-out 1.3s infinite;
+}
+
+@keyframes yas-loader-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yas-loader-letter-fill {
+    animation: none;
+    clip-path: inset(0% 0 0 0);
+  }
+  .yas-loader-pulse {
+    animation: none;
+  }
+}
+
+/* Landing page — halteres desfocados caindo ao fundo */
+.falling-weight {
+  animation-name: falling-weight;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes falling-weight {
+  from {
+    transform: translateY(-15vh) rotate(0deg);
+  }
+  to {
+    transform: translateY(115vh) rotate(35deg);
+  }
+}
+
+/* Landing page — logo do hero "crescendo" de baixo pra cima ao carregar */
+.hero-logo-reveal {
+  animation: hero-logo-reveal 1s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes hero-logo-reveal {
+  from {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0% 0 0 0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-reveal {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .falling-weight {
+    animation: none;
+    display: none;
+  }
 }
