@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# YAS — Acompanhamento de treinos
 
-## Getting Started
+App mobile-first (dark mode, preto + vermelho) com duas áreas: **Cliente**
+(aluno) e **Admin** (personal trainer). Next.js (App Router) + TypeScript +
+Tailwind + shadcn/ui no front, Supabase (Postgres + Auth + Storage) no back.
 
-First, run the development server:
+Não existe cadastro público — todo acesso é criado pelo admin (tela "+
+Adicionar aluno"), com senha provisória que o aluno troca no primeiro login.
+A landing page (`/`) só explica o app e leva pro login.
+
+## 1. Criar o projeto no Supabase
+
+1. Crie uma conta e um novo projeto em [supabase.com](https://supabase.com) (plano free serve).
+2. Em **Project Settings → API**, copie:
+   - `Project URL`
+   - `anon public` key
+   - `service_role` key (secreta — nunca exponha no client)
+3. Copie `.env.local.example` para `.env.local` e preencha as três variáveis.
+
+## 2. Rodar o schema
+
+No painel do Supabase, abra o **SQL Editor** e rode, nesta ordem, o conteúdo de:
+
+1. `supabase/migrations/0001_init.sql` — tabelas, RLS, funções e RPCs.
+2. `supabase/migrations/0002_storage.sql` — buckets de imagem e suas policies.
+3. `supabase/migrations/0003_senha_provisoria.sql` — flag de senha provisória.
+4. `supabase/migrations/0004_exercicios_catalogo.sql` — catálogo de exercícios.
+5. `supabase/migrations/0005_exercicio_imagem_fim.sql` — segunda imagem (posição final) no exercício prescrito.
+
+Depois, popule o catálogo de exercícios (uma vez só, local):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx tsx scripts/importar-catalogo-exercicios.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 3. Criar o primeiro admin
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+O **primeiro usuário admin** não tem como se autopromover — precisa ser
+criado manualmente uma única vez. Passo a passo em
+`supabase/scripts/promover_primeiro_admin.sql`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Em **Authentication → Users** no painel Supabase, clique em "Add user"
+   (email + senha, marque "Auto Confirm User").
+2. No **SQL Editor**, rode o conteúdo de `promover_primeiro_admin.sql`
+   trocando o email pelo que você acabou de criar.
 
-## Learn More
+Depois disso, esse admin usa a tela "+ Adicionar aluno" pra criar todo o
+resto dos acessos — sem precisar mais voltar ao SQL Editor.
 
-To learn more about Next.js, take a look at the following resources:
+## 4. Rodar o app
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Abra [http://localhost:3000](http://localhost:3000) — `/` é a landing page,
+`/login` redireciona automaticamente para a área do aluno ou do admin
+conforme o `tipo` do usuário em `profiles`.
 
-## Deploy on Vercel
+## Estrutura
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `app/page.tsx` — landing page pública
+- `app/aluno/*` — área do cliente (Início, Treinos, Detalhe do Treino, Progresso, Perfil)
+- `app/admin/*` — área do personal (Alunos, Treinos, Progresso, Perfil)
+- `proxy.ts` — sessão Supabase + redirecionamento por tipo de usuário (Next.js 16 renomeou `middleware.ts` para `proxy.ts`)
+- `lib/supabase/` — clients Supabase (browser, server, admin/service-role)
+- `lib/actions/` — Server Actions (mutações)
+- `lib/queries/` — leituras de dados usadas pelos Server Components
+- `supabase/migrations/` — schema, RLS e storage policies
+- `supabase/scripts/` — scripts SQL de uso pontual (ex.: promover o primeiro admin)
+- `scripts/` — scripts Node de manutenção (ex.: importação do catálogo de exercícios)
+"# YAS" 
