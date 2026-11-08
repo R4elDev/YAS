@@ -12,6 +12,16 @@ import type { PaginaCatalogo } from "@/lib/exercicios/tipos";
 // 'exercisedb'). RLS: só usuário autenticado ativo lê; nenhuma chamada à
 // ExerciseDB e nenhum service_role aqui.
 
+// Imagem do exercício: a do banco, se houver; senão o GIF público da ExerciseDB
+// derivado do id externo (o catálogo foi importado sem mídia). Só exibição.
+const MIDIA_EXERCISEDB = "https://static.exercisedb.dev/media/";
+function midiaDoItem(r: { imagem_inicio_url: string | null; id_externo: string | null }) {
+  if (r.imagem_inicio_url) return r.imagem_inicio_url;
+  return r.id_externo && /^[A-Za-z0-9]{3,20}$/.test(r.id_externo)
+    ? `${MIDIA_EXERCISEDB}${r.id_externo}.gif`
+    : null;
+}
+
 const TAMANHO_PADRAO = 20;
 const TAMANHO_MAX = 25;
 
@@ -45,7 +55,7 @@ export async function buscarCatalogoBanco(
   let q = supabase
     .from("exercicios_catalogo")
     .select(
-      "id, nome, nome_original, musculos_primarios, equipamentos, equipamento, imagem_inicio_url",
+      "id, nome, nome_original, musculos_primarios, equipamentos, equipamento, imagem_inicio_url, id_externo",
       { count: "exact" }
     )
     .eq("fonte", "exercisedb");
@@ -75,7 +85,7 @@ export async function buscarCatalogoBanco(
         id: r.id,
         nome: r.nome,
         nomeOriginal: r.nome_original,
-        gifUrl: r.imagem_inicio_url,
+        gifUrl: midiaDoItem(r),
         musculos: r.musculos_primarios.map(traduzirMusculo),
         equipamento: equip ? traduzirEquipamento(equip) : null,
       };
