@@ -1,8 +1,7 @@
-import Link from "next/link";
-import { YasBrand } from "@/components/layout/yas-brand";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { BottomNavAluno } from "@/components/layout/bottom-nav-aluno";
+import { AppShell } from "@/components/layout/app-shell";
+import "./aluno.css";
 
 export default async function AlunoLayout({
   children,
@@ -17,15 +16,18 @@ export default async function AlunoLayout({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("tipo")
+    .select("tipo, nome, avatar_url")
     .eq("id", user.id)
     .single();
   if (profile?.tipo !== "aluno") redirect("/");
 
   return (
-    <div className="app-frame flex flex-1 flex-col">
-      <header className="app-topbar"><Link href="/" aria-label="YAS início"><YasBrand /></Link><span className="app-topbar-label">Seu espaço de treino</span></header><div className="app-content flex-1 pb-28">{children}</div>
-      <BottomNavAluno />
-    </div>
+    <AppShell
+      papel="aluno"
+      nome={profile.nome}
+      avatarUrl={profile.avatar_url}
+    >
+      {children}
+    </AppShell>
   );
 }

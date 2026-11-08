@@ -1,0 +1,25 @@
+/* Estilos exclusivos do aluno (dono: Crivo). Prefixo .aluno-* */
+
+/* Feedback de toque: resposta imediata, sem animar a entrada da tela */
+.aluno-tap {
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.aluno-tap:active {
+  transform: scale(0.98);
+}
+
+/* Marcador lateral de status do treino (concluído x pendente) */
+.aluno-barra-status {
+  width: 4px;
+  height: 2.25rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aluno-tap,
+  .aluno-tap:active {
+    transition: none;
+    transform: none;
+  }
+}
