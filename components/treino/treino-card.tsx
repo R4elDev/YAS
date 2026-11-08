@@ -10,7 +10,7 @@ export function TreinoCard({ treino }: { treino: Treino }) {
   return (
     <Link
       href={`/aluno/treinos/${treino.id}`}
-      className="flex min-h-16 items-center justify-between gap-3 rounded-2xl bg-card px-4 py-3 transition-colors active:bg-accent"
+      className="flex min-h-16 items-center justify-between gap-3 yas-card px-4 py-3 transition-colors active:bg-accent"
     >
       <div className="flex min-w-0 flex-col gap-1">
         <span className="truncate text-base font-bold">{treino.nome}</span>

@@ -141,7 +141,7 @@ export function ExercicioCatalogoSheet({
                   key={item.id}
                   type="button"
                   onClick={() => selecionar(item)}
-                  className="flex items-center gap-3 rounded-2xl bg-card p-2.5 text-left transition-colors active:bg-accent"
+                  className="flex items-center gap-3 yas-card p-2.5 text-left transition-colors active:bg-accent"
                 >
                   <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
                     {item.imagem_inicio_url ? (

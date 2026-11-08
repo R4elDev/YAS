@@ -107,7 +107,7 @@ function EvolucaoChart({
   unidade: string;
 }) {
   return (
-    <div className="h-56 w-full rounded-2xl bg-card p-4">
+    <div className="yas-card h-56 w-full p-4">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={pontos} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />

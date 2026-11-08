@@ -59,7 +59,7 @@ export function TreinoAdminCard({ treino }: { treino: TreinoComAluno }) {
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl bg-card p-4">
+    <div className="flex flex-col gap-3 yas-card p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-0.5">
           <span className="text-base font-bold">{treino.nome}</span>

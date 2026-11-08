@@ -1,3 +1,4 @@
+import { YasPose } from "@/components/layout/yas-pose";
 import { createClient } from "@/lib/supabase/server";
 import { listProgressoPeso, listProgressoFotos, resolverUrlsFotos } from "@/lib/queries/progresso";
 import { getMapaProgressaoCarga, listHistoricoTreinos } from "@/lib/queries/treinos";
@@ -24,7 +25,7 @@ export default async function ProgressoPage() {
 
   return (
     <main className="flex flex-col gap-8 px-5 pt-8">
-      <h1 className="text-2xl font-extrabold">Meu progresso</h1>
+      <div className="progress-welcome"><div><p className="eyebrow">CADA PASSO CONTA</p><h1 className="text-3xl font-semibold tracking-tight">Meu progresso</h1><p className="mt-3 text-sm text-muted-foreground">Sua jornada merece ser acompanhada.</p></div><YasPose pose="jornada" className="progress-pose" sizes="150px" /></div>
 
       <section className="flex flex-col gap-4">
         <RegistrarPesoForm />

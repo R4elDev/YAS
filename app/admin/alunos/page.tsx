@@ -10,7 +10,7 @@ export default async function AdminAlunosPage() {
 
   return (
     <main className="flex flex-col gap-6 px-5 pt-8">
-      <h1 className="text-2xl font-extrabold">Alunos</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">Alunos</h1>
 
       <div className="grid grid-cols-2 gap-3 sm:max-w-md">
         <Link

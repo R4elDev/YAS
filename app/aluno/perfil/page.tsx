@@ -13,7 +13,7 @@ export default async function PerfilAlunoPage() {
 
   return (
     <main className="flex flex-col gap-8 px-5 pt-8">
-      <h1 className="text-2xl font-extrabold">Perfil</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">Perfil</h1>
 
       <AvatarUpload
         userId={profile.id}

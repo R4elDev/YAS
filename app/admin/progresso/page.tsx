@@ -9,7 +9,7 @@ export default async function AdminProgressoPage() {
   return (
     <main className="flex flex-col gap-6 px-5 pt-8">
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-extrabold">Progresso</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Progresso</h1>
         <p className="text-sm text-muted-foreground">
           Selecione um aluno para ver a evolução.
         </p>

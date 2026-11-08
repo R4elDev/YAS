@@ -8,7 +8,7 @@ export function AlunoListItem({ aluno }: { aluno: Profile }) {
   return (
     <Link
       href={`/admin/alunos/${aluno.id}`}
-      className="flex min-h-16 items-center justify-between gap-3 rounded-2xl bg-card px-4 py-3 transition-colors active:bg-accent"
+      className="flex min-h-16 items-center justify-between gap-3 yas-card px-4 py-3 transition-colors active:bg-accent"
     >
       <div className="flex min-w-0 items-center gap-3">
         <Avatar className="size-11">

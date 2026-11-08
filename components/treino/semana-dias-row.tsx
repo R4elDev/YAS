@@ -19,8 +19,8 @@ export function SemanaDiasRow({ dias, treinos }: SemanaDiasRowProps) {
         const conteudo = (
           <div
             className={cn(
-              "flex w-16 shrink-0 flex-col items-center gap-2 rounded-2xl border bg-card px-2 py-3",
-              dia.isHoje ? "border-primary" : "border-transparent"
+              "flex w-16 shrink-0 flex-col items-center gap-2 rounded-2xl border bg-card px-2 py-3 min-h-[5.5rem]",
+              dia.isHoje ? "border-primary" : "border-border"
             )}
           >
             <span
@@ -31,7 +31,7 @@ export function SemanaDiasRow({ dias, treinos }: SemanaDiasRowProps) {
             >
               {dia.label}
             </span>
-            <span className="text-lg font-extrabold">{dia.numero}</span>
+            <span className="text-lg font-semibold">{dia.numero}</span>
             {treino ? (
               <span
                 className={cn(

@@ -8,7 +8,13 @@ import { Label } from "@/components/ui/label";
 
 const initialState: AuthFormState = {};
 
-export function LoginForm() {
+export function LoginForm({
+  bancoConfigurado = true,
+  contaInvalida = false,
+}: {
+  bancoConfigurado?: boolean;
+  contaInvalida?: boolean;
+}) {
   const [state, formAction, isPending] = useActionState(
     signIn,
     initialState
@@ -38,6 +44,16 @@ export function LoginForm() {
           className="h-12 text-base"
         />
       </div>
+      {!bancoConfigurado ? (
+        <p role="alert" className="rounded-xl border border-border bg-card p-3 text-sm text-muted-foreground">
+          Banco de dados não configurado. Configure o Supabase para entrar.
+        </p>
+      ) : null}
+      {contaInvalida && !state?.error ? (
+        <p role="alert" className="text-sm text-destructive">
+          Conta não encontrada ou inativa.
+        </p>
+      ) : null}
       {state?.error ? (
         <p role="alert" className="text-sm text-destructive">
           {state.error}
@@ -45,7 +61,7 @@ export function LoginForm() {
       ) : null}
       <Button
         type="submit"
-        disabled={isPending}
+        disabled={isPending || !bancoConfigurado}
         size="lg"
         className="h-12 text-base font-bold"
       >

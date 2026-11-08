@@ -17,7 +17,7 @@ export function HistoricoTreinosList({ treinos }: { treinos: Treino[] }) {
       {treinos.map((treino) => (
         <li
           key={treino.id}
-          className="flex items-center justify-between gap-3 rounded-2xl bg-card px-4 py-3"
+          className="flex items-center justify-between gap-3 yas-card px-4 py-3"
         >
           <div className="flex flex-col gap-0.5">
             <span className="font-bold">{treino.nome}</span>

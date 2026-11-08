@@ -12,7 +12,7 @@ export default async function TreinosPage() {
 
   return (
     <main className="flex flex-col gap-6 px-5 pt-8">
-      <h1 className="text-2xl font-extrabold">Meus treinos</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">Meus treinos</h1>
       <TreinosLista treinos={treinos} />
     </main>
   );

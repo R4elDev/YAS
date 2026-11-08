@@ -41,7 +41,7 @@ export default async function AlunoProgressoAdminPage({
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <h1 className="text-xl font-extrabold">{aluno.nome}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{aluno.nome}</h1>
           <span className="text-sm text-muted-foreground">{aluno.email}</span>
         </div>
       </div>

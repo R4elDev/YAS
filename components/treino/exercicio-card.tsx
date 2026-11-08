@@ -29,7 +29,7 @@ export function ExercicioCard({
     <div
       className={cn(
         "flex flex-col gap-4 rounded-2xl border p-4 transition-colors",
-        concluido ? "border-primary/40 bg-primary/5" : "border-border bg-card"
+        concluido ? "border-primary/60 bg-primary/10" : "border-border bg-card"
       )}
     >
       <div className="flex gap-3">

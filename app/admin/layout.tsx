@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { YasBrand } from "@/components/layout/yas-brand";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { BottomNavAdmin } from "@/components/layout/bottom-nav-admin";
@@ -21,8 +23,8 @@ export default async function AdminLayout({
   if (profile?.tipo !== "admin") redirect("/");
 
   return (
-    <div className="flex min-h-full flex-1 flex-col">
-      <div className="flex-1 pb-24">{children}</div>
+    <div className="app-frame flex flex-1 flex-col">
+      <header className="app-topbar"><Link href="/" aria-label="YAS início"><YasBrand /></Link><span className="app-topbar-label">Área do personal</span></header><div className="app-content flex-1 pb-28">{children}</div>
       <BottomNavAdmin />
     </div>
   );

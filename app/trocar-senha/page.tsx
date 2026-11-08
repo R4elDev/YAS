@@ -9,7 +9,7 @@ export default function TrocarSenhaPage() {
           <div className="flex size-14 items-center justify-center rounded-full bg-primary/15 text-primary">
             <KeyRound className="size-6" />
           </div>
-          <h1 className="text-2xl font-extrabold">Defina sua senha</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">Defina sua senha</h1>
           <p className="text-sm text-muted-foreground">
             Você entrou com uma senha provisória. Crie uma senha nova antes
             de continuar.

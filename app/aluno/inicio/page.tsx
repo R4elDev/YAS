@@ -43,7 +43,7 @@ export default async function InicioPage() {
       <div className="flex items-center justify-between gap-3">
         <div className="flex flex-col">
           <span className="text-sm text-muted-foreground">Bom treino,</span>
-          <h1 className="text-2xl font-extrabold">{primeiroNome}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">{primeiroNome}</h1>
         </div>
         <Avatar className="size-11 border border-border">
           <AvatarImage src={profile.avatar_url ?? undefined} alt={profile.nome} />
@@ -54,7 +54,7 @@ export default async function InicioPage() {
       </div>
 
       {treinosSemana.length > 0 ? (
-        <div className="flex items-center gap-2 rounded-full bg-card px-4 py-3 text-sm">
+        <div className="yas-card flex items-center gap-2 rounded-full px-4 py-3 text-sm">
           <Flame className="size-4 text-primary" />
           <span>
             <span className="font-bold text-primary">{concluidos}</span> de{" "}
@@ -69,8 +69,8 @@ export default async function InicioPage() {
           totalExercicios={treinoDoDia.exercicios.length}
         />
       ) : (
-        <div className="rounded-3xl border border-dashed border-border p-6 text-sm text-muted-foreground">
-          Nenhum treino atribuído para hoje. Aproveite pra descansar 💤
+        <div className="rounded-3xl border border-dashed border-border p-6 text-sm leading-relaxed text-muted-foreground">
+          Nenhum treino atribuído para hoje. Aproveite para descansar e recuperar a energia.
         </div>
       )}
 
