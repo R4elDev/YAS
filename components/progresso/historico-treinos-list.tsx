@@ -6,8 +6,9 @@ import { Badge } from "@/components/ui/badge";
 export function HistoricoTreinosList({ treinos }: { treinos: Treino[] }) {
   if (treinos.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-border p-5 text-sm text-muted-foreground">
-        Nenhum treino no histórico ainda.
+      <div className="yas-empty pb-6">
+        <strong>Nenhum treino no histórico</strong>
+        <p>Quando você concluir treinos, eles aparecem aqui.</p>
       </div>
     );
   }
@@ -17,21 +18,21 @@ export function HistoricoTreinosList({ treinos }: { treinos: Treino[] }) {
       {treinos.map((treino) => (
         <li
           key={treino.id}
-          className="flex items-center justify-between gap-3 yas-card px-4 py-3"
+          className="yas-card flex min-h-14 items-center justify-between gap-3 px-4 py-3"
         >
-          <div className="flex flex-col gap-0.5">
-            <span className="font-bold">{treino.nome}</span>
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <span className="truncate font-bold">{treino.nome}</span>
             <span className="text-xs text-muted-foreground">
               {formatDataLonga(treino.data)}
             </span>
           </div>
           {treino.status === "concluido" ? (
-            <Badge className="gap-1 bg-primary/15 text-primary hover:bg-primary/15">
+            <Badge className="shrink-0 gap-1 bg-primary/15 text-primary hover:bg-primary/15">
               <CircleCheck className="size-3.5" />
               Concluído
             </Badge>
           ) : (
-            <Badge variant="secondary">Pendente</Badge>
+            <Badge variant="secondary" className="shrink-0">Pendente</Badge>
           )}
         </li>
       ))}

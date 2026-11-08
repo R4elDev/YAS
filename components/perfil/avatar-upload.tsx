@@ -65,7 +65,8 @@ export function AvatarUpload({ userId, nome, avatarUrl }: AvatarUploadProps) {
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={carregando}
-        className="relative"
+        aria-label="Trocar foto de perfil"
+        className="relative rounded-full outline-none transition-transform active:scale-[0.97] focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-70"
       >
         <Avatar className="size-24">
           <AvatarImage src={avatarUrl ?? undefined} alt={nome} />
@@ -73,7 +74,7 @@ export function AvatarUpload({ userId, nome, avatarUrl }: AvatarUploadProps) {
             {nome.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
-        <span className="absolute -right-1 -bottom-1 flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+        <span className="absolute -right-1 -bottom-1 flex size-11 items-center border-4 border-background justify-center rounded-full bg-primary text-primary-foreground">
           {carregando ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
@@ -88,6 +89,9 @@ export function AvatarUpload({ userId, nome, avatarUrl }: AvatarUploadProps) {
         className="hidden"
         onChange={handleFile}
       />
+      <p className="text-xs text-muted-foreground" aria-live="polite">
+        {carregando ? "Enviando foto..." : "Toque para trocar a foto"}
+      </p>
     </div>
   );
 }

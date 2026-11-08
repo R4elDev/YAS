@@ -17,19 +17,19 @@ export function NomeForm({ nome }: { nome: string }) {
   return (
     <form action={formAction} className="flex flex-col gap-2">
       <Label htmlFor="nome">Nome</Label>
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 min-[400px]:flex-row">
         <Input
           id="nome"
           name="nome"
           defaultValue={nome}
           required
-          className="h-12 flex-1 text-base"
+          className="h-12 min-w-0 flex-1 text-base"
         />
         <Button
           type="submit"
           disabled={isPending}
           size="lg"
-          className="h-12 font-bold"
+          className="h-12 min-w-28 font-bold"
         >
           {isPending ? "Salvando..." : "Salvar"}
         </Button>

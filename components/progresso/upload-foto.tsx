@@ -74,6 +74,14 @@ export function UploadFoto({ alunoId }: { alunoId: string }) {
         )}
         {carregando ? "Enviando..." : "Enviar foto de evolução"}
       </Button>
+      <p
+        className="mt-2 text-center text-xs text-muted-foreground"
+        aria-live="polite"
+      >
+        {carregando
+          ? "Aguarde, enviando sua foto."
+          : "Câmera ou galeria. Só você e sua coach veem."}
+      </p>
     </div>
   );
 }

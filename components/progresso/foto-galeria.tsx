@@ -5,8 +5,9 @@ import { formatDataLonga } from "@/lib/utils/date";
 export function FotoGaleria({ fotos }: { fotos: ProgressoFotoComUrl[] }) {
   if (fotos.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-border p-5 text-sm text-muted-foreground">
-        Nenhuma foto de evolução enviada ainda.
+      <div className="yas-empty pb-6">
+        <strong>Nenhuma foto ainda</strong>
+        <p>Envie uma foto para comparar sua evolução ao longo do tempo.</p>
       </div>
     );
   }
@@ -36,6 +37,7 @@ export function FotoGaleria({ fotos }: { fotos: ProgressoFotoComUrl[] }) {
                     src={foto.url}
                     alt={`Foto de progresso de ${formatDataLonga(foto.data)}`}
                     fill
+                    sizes="(min-width: 640px) 25vw, (min-width: 400px) 33vw, 50vw"
                     className="object-cover"
                   />
                 </div>

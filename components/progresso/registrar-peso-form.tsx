@@ -14,9 +14,9 @@ export function RegistrarPesoForm() {
   );
 
   return (
-    <form action={formAction} className="flex items-end gap-3">
-      <div className="flex flex-1 flex-col gap-1.5">
-        <label htmlFor="peso" className="text-xs text-muted-foreground">
+    <form action={formAction} className="yas-card yas-card-pad flex flex-wrap items-end gap-3">
+      <div className="flex min-w-0 flex-1 basis-40 flex-col gap-1.5">
+        <label htmlFor="peso" className="text-xs font-semibold text-muted-foreground">
           Peso de hoje (kg)
         </label>
         <Input
@@ -33,7 +33,7 @@ export function RegistrarPesoForm() {
       <Button
         type="submit"
         disabled={isPending}
-        className="h-12 font-bold"
+        className="h-12 min-w-28 font-bold"
       >
         {isPending ? "Salvando..." : "Salvar"}
       </Button>

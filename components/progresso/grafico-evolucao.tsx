@@ -50,12 +50,12 @@ export function GraficoEvolucao({ pesoData, cargaMap }: GraficoEvolucaoProps) {
 
   return (
     <Tabs defaultValue="peso" className="flex flex-col gap-4">
-      <TabsList className="w-full">
-        <TabsTrigger value="peso" className="flex-1">
-          Peso corporal
+      <TabsList className="h-11 w-full">
+        <TabsTrigger value="peso" className="min-h-11 flex-1">
+          Peso
         </TabsTrigger>
-        <TabsTrigger value="carga" className="flex-1">
-          Carga por exercício
+        <TabsTrigger value="carga" className="min-h-11 flex-1">
+          Carga
         </TabsTrigger>
       </TabsList>
 
@@ -106,23 +106,44 @@ function EvolucaoChart({
   pontos: { label: string; valor: number }[];
   unidade: string;
 }) {
+  const primeiro = pontos[0].valor;
+  const ultimo = pontos[pontos.length - 1].valor;
+  const delta = Math.round((ultimo - primeiro) * 10) / 10;
+  const fmt = (n: number) =>
+    n.toLocaleString("pt-BR", { maximumFractionDigits: 1 });
   return (
-    <div className="yas-card h-56 w-full p-4">
+    <div className="yas-card flex min-w-0 flex-col gap-3 p-3 sm:p-4">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 px-1">
+        <span className="text-2xl font-bold tabular-nums">
+          {fmt(ultimo)} {unidade}
+        </span>
+        <span className="text-xs text-muted-foreground">
+          {delta === 0
+            ? "Sem variação no período"
+            : `${delta > 0 ? "+" : ""}${fmt(delta)} ${unidade} desde ${pontos[0].label}`}
+        </span>
+      </div>
+      <div className="h-56 w-full min-w-0 sm:h-64">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={pontos} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+        <LineChart data={pontos} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
           <XAxis
             dataKey="label"
             tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
             axisLine={{ stroke: "var(--border)" }}
             tickLine={false}
+            interval="preserveStartEnd"
+            minTickGap={24}
+            padding={{ left: 8, right: 8 }}
           />
           <YAxis
             tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
             axisLine={false}
             tickLine={false}
-            unit={unidade}
-            width={48}
+            width={36}
+            tickCount={5}
+            domain={["dataMin - 1", "dataMax + 1"]}
+            tickFormatter={(v: number) => String(Math.round(v))}
           />
           <Tooltip
             contentStyle={{
@@ -133,6 +154,8 @@ function EvolucaoChart({
               fontSize: 13,
             }}
             labelStyle={{ color: "var(--muted-foreground)" }}
+            formatter={(v) => [`${fmt(Number(v))} ${unidade}`, ""]}
+            separator=""
           />
           <Line
             type="monotone"
@@ -140,18 +163,19 @@ function EvolucaoChart({
             stroke="var(--primary)"
             strokeWidth={2.5}
             dot={{ r: 3, fill: "var(--primary)" }}
-            activeDot={{ r: 5 }}
+            activeDot={{ r: 6 }}
           />
         </LineChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 }
 
 function EstadoVazio({ texto }: { texto: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-border p-5 text-sm text-muted-foreground">
-      {texto}
+    <div className="yas-empty pb-6">
+      <p>{texto}</p>
     </div>
   );
 }
