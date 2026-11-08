@@ -48,6 +48,7 @@ export function ExercicioImagemLightbox({
           alt={nome}
           width={64}
           height={64}
+          unoptimized={imagemUrl.endsWith(".gif")}
           className="size-16 object-cover"
         />
         <span className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-active:bg-black/30">
@@ -72,6 +73,7 @@ export function ExercicioImagemLightbox({
               src={imagemExibida}
               alt={nome}
               fill
+              unoptimized={imagemExibida.endsWith(".gif")}
               className="object-cover"
               sizes="(max-width: 640px) 100vw, 448px"
             />

@@ -31,6 +31,8 @@ export interface ExercicioDraft {
   observacoes: string;
   /** Só pra exibição (badge de músculos); não é persistido em `exercicios`. */
   musculosPrimarios?: string[];
+  /** Veio do catálogo ExerciseDB (nome/GIF fixos, sem catalogo_id). */
+  externo?: boolean;
 }
 
 interface ExercicioFormRowProps {
@@ -54,7 +56,7 @@ export function ExercicioFormRow({
   } = useSortable({ id: exercicio.clientId });
   const inputRef = useRef<HTMLInputElement>(null);
   const [enviando, setEnviando] = useState(false);
-  const doCatalogo = Boolean(exercicio.catalogoId);
+  const doCatalogo = Boolean(exercicio.catalogoId) || Boolean(exercicio.externo);
 
   const style = {
     transform: CSS.Transform.toString(transform),

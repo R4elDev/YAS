@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Plus, Search } from "lucide-react";
 import type { Profile, Treino, Exercicio } from "@/lib/types/database.types";
 import type { CatalogoResumo } from "@/lib/queries/catalogo";
+import type { ItemCatalogoExterno } from "@/lib/exercicios/tipos";
 import { criarTreino, atualizarTreino } from "@/lib/actions/treinos";
 import { ExerciciosDndList } from "@/components/treino/exercicios-dnd-list";
 import { ExercicioCatalogoSheet } from "@/components/treino/exercicio-catalogo-sheet";
@@ -44,6 +45,7 @@ function exercicioParaDraft(
     repeticoes: ex.repeticoes,
     observacoes: ex.observacoes ?? "",
     musculosPrimarios: doCatalogo?.musculos_primarios,
+    externo: !ex.catalogo_id && Boolean(ex.imagem_url?.includes("exercisedb.dev")),
   };
 }
 
@@ -69,19 +71,23 @@ export function TreinoBuilder({
   const [salvando, startSalvando] = useTransition();
   const router = useRouter();
 
-  function adicionarDoCatalogo(item: CatalogoResumo) {
+  // Exercícios novos vêm da ExerciseDB: sem FK no catálogo antigo
+  // (catalogo_id null), GIF animado em imagem_url e imagem de "fim" nula.
+  // nome/imagem_url são snapshot, como sempre.
+  function adicionarDoCatalogo(item: ItemCatalogoExterno) {
     setExercicios((prev) => [
       ...prev,
       {
         clientId: crypto.randomUUID(),
-        catalogoId: item.id,
+        catalogoId: null,
         nome: item.nome,
-        imagem_url: item.imagem_inicio_url,
-        imagemFimUrl: item.imagem_fim_url,
+        imagem_url: item.gifUrl,
+        imagemFimUrl: null,
         series: 3,
         repeticoes: "",
         observacoes: "",
-        musculosPrimarios: item.musculos_primarios,
+        musculosPrimarios: item.musculos,
+        externo: true,
       },
     ]);
   }
@@ -255,7 +261,6 @@ export function TreinoBuilder({
       <ExercicioCatalogoSheet
         open={catalogoAberto}
         onOpenChange={setCatalogoAberto}
-        catalogo={catalogo}
         onSelecionar={adicionarDoCatalogo}
         onPersonalizado={adicionarPersonalizado}
       />

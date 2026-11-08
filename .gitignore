@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ExerciseDB: arquivos temporários do importador
+lib/exercicios/data/.partial.json
+lib/exercicios/data/.partial.done
