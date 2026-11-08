@@ -4,7 +4,6 @@ import type { Exercicio } from "@/lib/types/database.types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ExercicioImagemLightbox } from "@/components/treino/exercicio-imagem-lightbox";
-import { midiaVisivel } from "@/lib/exercicios/midia";
 import { cn } from "@/lib/utils";
 import { CircleCheck, Circle } from "lucide-react";
 
@@ -34,11 +33,11 @@ export function ExercicioCard({
       )}
     >
       <div className="flex gap-3">
-        {midiaVisivel(exercicio.imagem_url) ? (
+        {exercicio.imagem_url ? (
           <ExercicioImagemLightbox
             nome={exercicio.nome}
-            imagemUrl={midiaVisivel(exercicio.imagem_url)}
-            imagemFimUrl={midiaVisivel(exercicio.imagem_fim_url)}
+            imagemUrl={exercicio.imagem_url}
+            imagemFimUrl={exercicio.imagem_fim_url}
             tamanho="lg"
           />
         ) : null}

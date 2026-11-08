@@ -7,7 +7,6 @@ import {
   buscarExerciciosCatalogo,
   type ResultadoBuscaCatalogo,
 } from "@/lib/actions/catalogo-externo";
-import { midiaVisivel } from "@/lib/exercicios/midia";
 import { NOMES_GRUPOS } from "@/lib/exercicios/dicionario";
 import type { ItemCatalogoExterno } from "@/lib/exercicios/tipos";
 import {
@@ -211,10 +210,10 @@ export function ExercicioCatalogoSheet({
                   onClick={() => selecionar(item)}
                   className="flex min-w-0 items-center gap-3 yas-card p-2.5 text-left transition-[background-color,transform] duration-150 ease-out active:scale-[0.985] active:bg-accent"
                 >
-                  {midiaVisivel(item.gifUrl) ? (
+                  {item.gifUrl ? (
                     <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
                       <Image
-                        src={midiaVisivel(item.gifUrl)!}
+                        src={item.gifUrl}
                         alt=""
                         width={56}
                         height={56}
