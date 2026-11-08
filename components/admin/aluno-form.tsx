@@ -4,7 +4,7 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { Copy, Check, KeyRound } from "lucide-react";
 import { criarAluno, type AlunoFormState } from "@/lib/actions/alunos";
-import { YasPose } from "@/components/layout/yas-pose";
+import { YasFace } from "@/components/yas/yas-face";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -103,10 +103,10 @@ function CredenciaisCriadas({ senha }: { senha: string }) {
             de acessar o app.
           </p>
         </div>
-        <YasPose
-          pose="convite"
-          sizes="112px"
-          className="pointer-events-none absolute right-2 bottom-0 h-28 w-auto object-contain object-bottom sm:h-36"
+        <YasFace
+          rosto="feliz-orgulhosa"
+          size={88}
+          className="pointer-events-none absolute top-4 right-4"
         />
         <div className="mt-4 flex items-center justify-between gap-3 rounded-xl bg-background px-4 py-2">
           <span className="min-w-0 break-all font-mono text-lg font-bold select-all">

@@ -442,3 +442,54 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--primary); outli
 @media (max-width: 360px) {
   .hero-coach-label { bottom: 52px; }
 }
+
+/* ===== Tema "Yas viva": preto + vermelho vivo (somente no interior do app) =====
+   Escopo por :has(.app-shell) para não alterar a landing nem o login; como é
+   no <html>, também vale para portais (dialog, sheet, toast).
+   Contraste: branco sobre --primary = 4.8:1; --primary-text (texto vermelho
+   sobre preto) = 6.1:1. */
+html:has(.app-shell) {
+  --background: #0a0a0a;
+  --card: #141414;
+  --popover: #181818;
+  --secondary: #1f1f1f;
+  --muted: #1a1a1a;
+  --accent: #242424;
+  --border: #2b2b2b;
+  --input: #363636;
+  --line-strong: #404040;
+  --surface-2: #1c1c1c;
+  --sidebar: #0f0f0f;
+  --sidebar-accent: #242424;
+  --sidebar-border: #2b2b2b;
+  --muted-foreground: #a8a8a8;
+  --primary: #e11d2a;
+  --primary-foreground: #ffffff;
+  --primary-text: #ff5a62;
+  --ring: #ff4d57;
+  --chart-1: #ff3b47;
+  --chart-3: #ff8a8f;
+  --chart-4: #b3141f;
+  --chart-5: #6f0d14;
+  --sidebar-primary: #e11d2a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-ring: #ff4d57;
+  --coral-hover: #f23542;
+  --destructive: #ff8a3d;
+}
+html:has(.app-shell) .text-primary { color: var(--primary-text); }
+html:has(.app-shell) .yas-kicker { color: var(--primary-text); }
+html:has(.app-shell) ::selection { background: var(--primary); color: #fff; }
+
+/* Rosto da Yas (galeria oficial: RGB com fundo branco, sem transparência) */
+/* em @layer components para que utilitários (absolute, size-*) possam sobrescrever */
+@layer components {
+  .yas-face { position: relative; display: inline-block; flex-shrink: 0; overflow: hidden; border-radius: 30%; background: #fff; }
+  .yas-face > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .yas-face::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 2px var(--primary); pointer-events: none; }
+}
+
+/* Entrada de página: só opacidade/translate curtos, dado legível desde o 1º frame */
+@keyframes yas-page-in { from { opacity: 0.6; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.yas-page-enter { animation: yas-page-in 180ms var(--ease-out) both; }
+@media (prefers-reduced-motion: reduce) { .yas-page-enter { animation: none; } }

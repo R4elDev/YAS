@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Plus, Search } from "lucide-react";
 import type { TreinoComAluno } from "@/lib/queries/treinos";
 import { TreinoAdminCard } from "@/components/admin/treino-admin-card";
-import { YasPose } from "@/components/layout/yas-pose";
+import { YasFace } from "@/components/yas/yas-face";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -46,7 +46,7 @@ export function TreinosListaAdmin({ treinos }: { treinos: TreinoComAluno[] }) {
             Criar treino
           </Button>
         </div>
-        <YasPose pose="planejamento" className="yas-empty-pose" sizes="120px" />
+        <YasFace rosto="pensativa" size={104} className="mt-3 mb-5" />
       </div>
     );
   }

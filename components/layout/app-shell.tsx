@@ -4,6 +4,7 @@ import { YasPose } from "@/components/layout/yas-pose";
 import { BottomNav, SidebarNav } from "@/components/layout/bottom-nav";
 import type { Papel } from "@/components/layout/nav-itens";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { YasPopups } from "@/components/yas/yas-popups";
 
 const ROTULO: Record<Papel, string> = {
   admin: "Área do personal",
@@ -12,6 +13,7 @@ const ROTULO: Record<Papel, string> = {
 
 interface AppShellProps {
   papel: Papel;
+  usuarioId: string;
   nome: string;
   avatarUrl: string | null;
   children: React.ReactNode;
@@ -22,7 +24,13 @@ interface AppShellProps {
  * >=1024px: sidebar fixa + conteúdo largo. <1024px: topbar + bottom-nav.
  * As páginas só renderizam <main className="yas-page">.
  */
-export function AppShell({ papel, nome, avatarUrl, children }: AppShellProps) {
+export function AppShell({
+  papel,
+  usuarioId,
+  nome,
+  avatarUrl,
+  children,
+}: AppShellProps) {
   const perfilHref = papel === "admin" ? "/admin/perfil" : "/aluno/perfil";
 
   return (
@@ -70,6 +78,7 @@ export function AppShell({ papel, nome, avatarUrl, children }: AppShellProps) {
       </div>
 
       <BottomNav papel={papel} />
+      <YasPopups papel={papel} usuarioId={usuarioId} nome={nome} />
     </div>
   );
 }

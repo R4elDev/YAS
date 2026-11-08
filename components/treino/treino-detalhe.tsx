@@ -7,6 +7,7 @@ import type { Exercicio, Treino } from "@/lib/types/database.types";
 import { ExercicioCard } from "@/components/treino/exercicio-card";
 import { ProgressoBarTreino } from "@/components/treino/progresso-bar-treino";
 import { Button } from "@/components/ui/button";
+import { YasFace } from "@/components/yas/yas-face";
 import { atualizarExercicioAluno } from "@/lib/actions/exercicios";
 import { finalizarTreino } from "@/lib/actions/treinos";
 
@@ -103,6 +104,12 @@ export function TreinoDetalhe({
       </div>
 
       <div className="flex flex-col gap-2">
+        {jaFinalizado ? (
+          <div className="flex items-center justify-center gap-3 py-2">
+            <YasFace rosto="beijo-finalizacao" size={72} />
+            <span className="text-sm font-medium">Treino concluído. Mandou bem!</span>
+          </div>
+        ) : null}
         <Button
           size="lg"
           className="h-14 w-full text-base font-bold"

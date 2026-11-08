@@ -1,4 +1,4 @@
-import { YasPose } from "@/components/layout/yas-pose";
+import { YasFace } from "@/components/yas/yas-face";
 import { createClient } from "@/lib/supabase/server";
 import { listProgressoPeso, listProgressoFotos, resolverUrlsFotos } from "@/lib/queries/progresso";
 import { getMapaProgressaoCarga, listHistoricoTreinos } from "@/lib/queries/treinos";
@@ -25,13 +25,13 @@ export default async function ProgressoPage() {
 
   return (
     <main className="yas-page">
-      <header className="yas-page-header">
+      <header className="yas-page-header flex-nowrap! items-center">
         <div>
           <p className="yas-kicker">Cada passo conta</p>
           <h1>Meu progresso</h1>
           <p>Sua jornada merece ser acompanhada.</p>
         </div>
-        <YasPose pose="jornada" className="aluno-pose-destaque" sizes="112px" />
+        <YasFace rosto="feliz-orgulhosa" size={96} />
       </header>
 
       <section className="yas-stack">

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Search, UserPlus } from "lucide-react";
 import type { Profile } from "@/lib/types/database.types";
 import { AlunoListItem } from "@/components/admin/aluno-list-item";
-import { YasPose } from "@/components/layout/yas-pose";
+import { YasFace } from "@/components/yas/yas-face";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -55,7 +55,7 @@ export function AlunosLista({
             </Button>
           </div>
         ) : null}
-        <YasPose pose="convite" className="yas-empty-pose" sizes="120px" />
+        <YasFace rosto="pensativa" size={104} className="mt-3 mb-5" />
       </div>
     );
   }

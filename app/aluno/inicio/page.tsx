@@ -6,7 +6,7 @@ import { listTreinosPeriodo, getTreinoComExercicios } from "@/lib/queries/treino
 import { getDiasDaSemana, getWeekRange, todayISODate } from "@/lib/utils/date";
 import { TreinoDoDiaCard } from "@/components/treino/treino-do-dia-card";
 import { SemanaDiasRow } from "@/components/treino/semana-dias-row";
-import { YasPose } from "@/components/layout/yas-pose";
+import { YasFace } from "@/components/yas/yas-face";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 function iniciais(nome: string) {
@@ -96,11 +96,7 @@ export default async function InicioPage() {
         />
       ) : (
         <section className="yas-empty">
-          <YasPose
-            pose="alongamento"
-            className="yas-empty-pose"
-            sizes="120px"
-          />
+          <YasFace rosto="cansada-sono" size={104} className="mb-5" />
           <strong>Dia de descanso</strong>
           <p>Nenhum treino para hoje. Recuperar também faz parte do resultado.</p>
         </section>
