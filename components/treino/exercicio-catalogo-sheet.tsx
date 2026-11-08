@@ -3,7 +3,10 @@
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { Search, Dumbbell, PenLine, Loader2, RefreshCw } from "lucide-react";
-import { buscarExerciciosCatalogo } from "@/lib/actions/catalogo-externo";
+import {
+  buscarExerciciosCatalogo,
+  type ResultadoBuscaCatalogo,
+} from "@/lib/actions/catalogo-externo";
 import { NOMES_GRUPOS } from "@/lib/exercicios/dicionario";
 import type { ItemCatalogoExterno } from "@/lib/exercicios/tipos";
 import {
@@ -35,13 +38,22 @@ interface ExercicioCatalogoSheetProps {
   onOpenChange: (open: boolean) => void;
   onSelecionar: (item: ItemCatalogoExterno) => void;
   onPersonalizado: () => void;
+  /** Busca injetável (QA/fixtures). Padrão: server action sobre o Supabase. */
+  buscar?: BuscaCatalogoFn;
 }
+
+export type BuscaCatalogoFn = (input: {
+  busca: string;
+  grupo: string | null;
+  pagina: number;
+}) => Promise<ResultadoBuscaCatalogo>;
 
 export function ExercicioCatalogoSheet({
   open,
   onOpenChange,
   onSelecionar,
   onPersonalizado,
+  buscar = buscarExerciciosCatalogo,
 }: ExercicioCatalogoSheetProps) {
   const [busca, setBusca] = useState("");
   const [grupoAtivo, setGrupoAtivo] = useState<string | null>(null);
@@ -60,7 +72,7 @@ export function ExercicioCatalogoSheet({
       setCarregando(true);
       setErro(null);
       try {
-        const res = await buscarExerciciosCatalogo({
+        const res = await buscar({
           busca: termo,
           grupo,
           pagina: proxima,
@@ -84,7 +96,7 @@ export function ExercicioCatalogoSheet({
         if (id === requisicao.current) setCarregando(false);
       }
     },
-    []
+    [buscar]
   );
 
   const filtroAtivo = busca.trim().length > 0 || grupoAtivo !== null;
@@ -198,21 +210,28 @@ export function ExercicioCatalogoSheet({
                   onClick={() => selecionar(item)}
                   className="flex min-w-0 items-center gap-3 yas-card p-2.5 text-left transition-[background-color,transform] duration-150 ease-out active:scale-[0.985] active:bg-accent"
                 >
-                  <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
-                    <Image
-                      src={item.gifUrl}
-                      alt=""
-                      width={56}
-                      height={56}
-                      unoptimized
-                      loading="lazy"
-                      className="size-14 object-cover"
-                    />
-                  </div>
+                  {item.gifUrl ? (
+                    <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
+                      <Image
+                        src={item.gifUrl}
+                        alt=""
+                        width={56}
+                        height={56}
+                        unoptimized
+                        loading="lazy"
+                        className="size-14 object-cover"
+                      />
+                    </div>
+                  ) : null}
                   <div className="flex min-w-0 flex-col gap-0.5">
                     <span className="truncate text-sm font-bold">
                       {item.nome}
                     </span>
+                    {item.nomeOriginal.toLowerCase() !== item.nome.toLowerCase() ? (
+                      <span className="truncate text-xs text-muted-foreground/80">
+                        {item.nomeOriginal}
+                      </span>
+                    ) : null}
                     <span className="truncate text-xs text-muted-foreground">
                       {item.musculos.join(", ")}
                       {item.equipamento ? ` · ${item.equipamento}` : ""}
@@ -262,7 +281,7 @@ export function ExercicioCatalogoSheet({
             Exercício personalizado
           </Button>
           <p className="mt-2 text-center text-[10px] text-muted-foreground">
-            Exercícios e GIFs: ExerciseDB / AscendAPI
+            Base de exercícios: ExerciseDB OSS
           </p>
         </div>
       </SheetContent>

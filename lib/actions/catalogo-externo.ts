@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { buscarCatalogoExterno } from "@/lib/exercicios/catalogo-externo";
+import { buscarCatalogoBanco } from "@/lib/exercicios/catalogo-banco";
 import type { PaginaCatalogo } from "@/lib/exercicios/tipos";
 
 export type ResultadoBuscaCatalogo =
@@ -32,7 +32,7 @@ export async function buscarExerciciosCatalogo(input: {
       ? Math.min(Math.max(Math.trunc(input.pagina), 1), 200)
       : 1;
 
-    return { ok: true, ...buscarCatalogoExterno({ busca, grupo, pagina }) };
+    return { ok: true, ...(await buscarCatalogoBanco(supabase, { busca, grupo, pagina })) };
   } catch {
     return { ok: false, erro: "Catálogo indisponível no momento." };
   }

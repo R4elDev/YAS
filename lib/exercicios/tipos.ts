@@ -1,11 +1,11 @@
 export interface ItemCatalogoExterno {
-  /** exerciseId da ExerciseDB (não é gravado em `exercicios`; ver docs). */
+  /** `exercicios_catalogo.id` (ex.: "exdb:0CXGHya"): é o que vira `exercicios.catalogo_id`. */
   id: string;
-  /** Nome em PT (dicionário parcial) — é o que vira snapshot do treino. */
+  /** Nome em PT quando há tradução no banco; senão o original. Vira snapshot do treino. */
   nome: string;
   nomeOriginal: string;
-  /** GIF animado. Novos exercícios não têm imagem de "fim". */
-  gifUrl: string;
+  /** Mídia opcional: o catálogo do banco não depende de GIF. */
+  gifUrl: string | null;
   musculos: string[];
   equipamento: string | null;
 }

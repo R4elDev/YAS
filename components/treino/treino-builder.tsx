@@ -5,11 +5,15 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Plus, Search } from "lucide-react";
 import type { Profile, Treino, Exercicio } from "@/lib/types/database.types";
+import { traduzirMusculo } from "@/lib/exercicios/dicionario";
 import type { CatalogoResumo } from "@/lib/queries/catalogo";
 import type { ItemCatalogoExterno } from "@/lib/exercicios/tipos";
 import { criarTreino, atualizarTreino } from "@/lib/actions/treinos";
 import { ExerciciosDndList } from "@/components/treino/exercicios-dnd-list";
-import { ExercicioCatalogoSheet } from "@/components/treino/exercicio-catalogo-sheet";
+import {
+  ExercicioCatalogoSheet,
+  type BuscaCatalogoFn,
+} from "@/components/treino/exercicio-catalogo-sheet";
 import type { ExercicioDraft } from "@/components/treino/exercicio-form-row";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +32,8 @@ interface TreinoBuilderProps {
   catalogo: CatalogoResumo[];
   treino?: Treino;
   exerciciosIniciais?: Exercicio[];
+  /** Só QA/fixtures; produção usa a busca padrão do sheet. */
+  buscarCatalogo?: BuscaCatalogoFn;
 }
 
 function exercicioParaDraft(
@@ -44,7 +50,7 @@ function exercicioParaDraft(
     series: ex.series,
     repeticoes: ex.repeticoes,
     observacoes: ex.observacoes ?? "",
-    musculosPrimarios: doCatalogo?.musculos_primarios,
+    musculosPrimarios: doCatalogo?.musculos_primarios.map(traduzirMusculo),
     externo: !ex.catalogo_id && Boolean(ex.imagem_url?.includes("exercisedb.dev")),
   };
 }
@@ -54,6 +60,7 @@ export function TreinoBuilder({
   catalogo,
   treino,
   exerciciosIniciais,
+  buscarCatalogo,
 }: TreinoBuilderProps) {
   const isEdicao = Boolean(treino);
   const catalogoPorId = useMemo(
@@ -71,15 +78,15 @@ export function TreinoBuilder({
   const [salvando, startSalvando] = useTransition();
   const router = useRouter();
 
-  // Exercícios novos vêm da ExerciseDB: sem FK no catálogo antigo
-  // (catalogo_id null), GIF animado em imagem_url e imagem de "fim" nula.
-  // nome/imagem_url são snapshot, como sempre.
+  // Exercícios novos vêm do catálogo no Supabase: catalogo_id válido
+  // ("exdb:..."), mídia opcional (pode ser null) e sem imagem de "fim".
+  // nome/imagem_url continuam snapshot, como sempre.
   function adicionarDoCatalogo(item: ItemCatalogoExterno) {
     setExercicios((prev) => [
       ...prev,
       {
         clientId: crypto.randomUUID(),
-        catalogoId: null,
+        catalogoId: item.id,
         nome: item.nome,
         imagem_url: item.gifUrl,
         imagemFimUrl: null,
@@ -87,7 +94,6 @@ export function TreinoBuilder({
         repeticoes: "",
         observacoes: "",
         musculosPrimarios: item.musculos,
-        externo: true,
       },
     ]);
   }
@@ -265,6 +271,7 @@ export function TreinoBuilder({
         onOpenChange={setCatalogoAberto}
         onSelecionar={adicionarDoCatalogo}
         onPersonalizado={adicionarPersonalizado}
+        buscar={buscarCatalogo}
       />
     </div>
   );

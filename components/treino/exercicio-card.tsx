@@ -33,12 +33,14 @@ export function ExercicioCard({
       )}
     >
       <div className="flex gap-3">
-        <ExercicioImagemLightbox
-          nome={exercicio.nome}
-          imagemUrl={exercicio.imagem_url}
-          imagemFimUrl={exercicio.imagem_fim_url}
-          tamanho="lg"
-        />
+        {exercicio.imagem_url ? (
+          <ExercicioImagemLightbox
+            nome={exercicio.nome}
+            imagemUrl={exercicio.imagem_url}
+            imagemFimUrl={exercicio.imagem_fim_url}
+            tamanho="lg"
+          />
+        ) : null}
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <h3 className="text-base leading-snug font-bold break-words text-balance">
             {exercicio.nome}

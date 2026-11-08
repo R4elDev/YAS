@@ -33,6 +33,29 @@ export interface TreinoInput {
   exercicios: ExercicioInput[];
 }
 
+/**
+ * catalogo_id desconhecido (catálogo trocado/removido) vira null em vez de
+ * derrubar o save pela FK: nome/imagem do snapshot continuam valendo.
+ */
+async function sanitizarCatalogoIds(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  exercicios: ExercicioInput[]
+): Promise<ExercicioInput[]> {
+  const ids = [
+    ...new Set(exercicios.flatMap((e) => (e.catalogo_id ? [e.catalogo_id] : []))),
+  ];
+  if (ids.length === 0) return exercicios;
+  const { data, error } = await supabase
+    .from("exercicios_catalogo")
+    .select("id")
+    .in("id", ids);
+  if (error) throw new Error(error.message);
+  const validos = new Set((data ?? []).map((r) => r.id));
+  return exercicios.map((e) =>
+    e.catalogo_id && !validos.has(e.catalogo_id) ? { ...e, catalogo_id: null } : e
+  );
+}
+
 // Não usa redirect() de propósito: quem chama (client component) faz o
 // router.push após o await resolver, evitando o gotcha de capturar o sinal
 // de redirect do Next dentro de um try/catch no cliente.
@@ -42,6 +65,9 @@ export async function criarTreino(input: TreinoInput): Promise<{ id: string }> {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Não autenticado.");
+
+  // Valida ids de catálogo ANTES de qualquer escrita: falha aqui não deixa treino vazio.
+  const exerciciosOkA = await sanitizarCatalogoIds(supabase, input.exercicios);
 
   const { data: treino, error } = await supabase
     .from("treinos")
@@ -55,9 +81,9 @@ export async function criarTreino(input: TreinoInput): Promise<{ id: string }> {
     .single();
   if (error || !treino) throw new Error(error?.message ?? "Erro ao criar treino.");
 
-  if (input.exercicios.length > 0) {
+  if (exerciciosOkA.length > 0) {
     const { error: exError } = await supabase.from("exercicios").insert(
-      input.exercicios.map((ex, i) => ({
+      exerciciosOkA.map((ex, i) => ({
         treino_id: treino.id,
         catalogo_id: ex.catalogo_id,
         nome: ex.nome,
@@ -83,6 +109,9 @@ export async function atualizarTreino(
 ): Promise<void> {
   const supabase = await createClient();
 
+  // Valida ids de catálogo ANTES do update/delete: falha aqui não apaga exercícios.
+  const exerciciosOkB = await sanitizarCatalogoIds(supabase, input.exercicios);
+
   const { error } = await supabase
     .from("treinos")
     .update({ aluno_id: input.alunoId, nome: input.nome, data: input.data })
@@ -97,9 +126,9 @@ export async function atualizarTreino(
     .eq("treino_id", treinoId);
   if (delError) throw new Error(delError.message);
 
-  if (input.exercicios.length > 0) {
+  if (exerciciosOkB.length > 0) {
     const { error: exError } = await supabase.from("exercicios").insert(
-      input.exercicios.map((ex, i) => ({
+      exerciciosOkB.map((ex, i) => ({
         treino_id: treinoId,
         catalogo_id: ex.catalogo_id,
         nome: ex.nome,

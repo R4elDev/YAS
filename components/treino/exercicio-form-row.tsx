@@ -31,7 +31,7 @@ export interface ExercicioDraft {
   observacoes: string;
   /** Só pra exibição (badge de músculos); não é persistido em `exercicios`. */
   musculosPrimarios?: string[];
-  /** Veio do catálogo ExerciseDB (nome/GIF fixos, sem catalogo_id). */
+  /** Snapshot legado: GIF ExerciseDB sem catalogo_id (treinos antigos). */
   externo?: boolean;
 }
 
@@ -94,6 +94,7 @@ export function ExercicioFormRow({
     <div
       ref={setNodeRef}
       style={style}
+      data-catalogo-id={exercicio.catalogoId ?? undefined}
       className={cn(
         "flex flex-col gap-3 rounded-2xl border border-border bg-card p-4",
         isDragging && "opacity-60"
@@ -111,11 +112,14 @@ export function ExercicioFormRow({
         </button>
 
         {doCatalogo ? (
-          <ExercicioImagemLightbox
-            nome={exercicio.nome}
-            imagemUrl={exercicio.imagem_url}
-            imagemFimUrl={exercicio.imagemFimUrl}
-          />
+          // Catálogo sem mídia: nada de quadrado vazio nem botão de ampliar.
+          exercicio.imagem_url ? (
+            <ExercicioImagemLightbox
+              nome={exercicio.nome}
+              imagemUrl={exercicio.imagem_url}
+              imagemFimUrl={exercicio.imagemFimUrl}
+            />
+          ) : null
         ) : exercicio.imagem_url ? (
           <div className="relative shrink-0">
             <ExercicioImagemLightbox

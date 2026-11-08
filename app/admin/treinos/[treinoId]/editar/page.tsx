@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { listAlunos } from "@/lib/queries/profiles";
 import { getTreinoComExercicios } from "@/lib/queries/treinos";
-import { listCatalogoResumo } from "@/lib/queries/catalogo";
+import { listCatalogoResumoPorIds } from "@/lib/queries/catalogo";
 import { TreinoBuilder } from "@/components/treino/treino-builder";
 
 export default async function EditarTreinoPage({
@@ -13,12 +13,15 @@ export default async function EditarTreinoPage({
   const { treinoId } = await params;
   const supabase = await createClient();
 
-  const [treino, alunos, catalogo] = await Promise.all([
+  const [treino, alunos] = await Promise.all([
     getTreinoComExercicios(supabase, treinoId),
     listAlunos(supabase),
-    listCatalogoResumo(supabase),
   ]);
   if (!treino) notFound();
+  const catalogo = await listCatalogoResumoPorIds(
+    supabase,
+    treino.exercicios.flatMap((e) => (e.catalogo_id ? [e.catalogo_id] : []))
+  );
 
   return (
     <main className="yas-page">
