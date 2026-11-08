@@ -44,7 +44,6 @@ Aluno (Crivo) consome; falta algo → pedir, não inventar utilitário global.
 | `.yas-chip-row` | linha de chips: scroll horizontal no mobile, quebra ≥640 |
 | `.yas-empty` (+ `.yas-empty-pose`, `.yas-empty-actions`) | estado vazio com YasPose |
 | `.yas-form` | coluna de campos (gap 20) |
-| `.yas-rise` | entrada escalonada dos filhos diretos (300ms, ease-out, respeita reduced-motion) |
 
 ## Regras
 

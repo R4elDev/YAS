@@ -53,7 +53,7 @@ export default async function AdminAlunosPage() {
         </div>
       </header>
 
-      <section aria-label="Resumo" className="yas-stat-grid yas-rise">
+      <section aria-label="Resumo" className="yas-stat-grid">
         {resumo.map((item) => (
           <div key={item.rotulo} className="yas-card yas-stat">
             <strong>{item.valor}</strong>

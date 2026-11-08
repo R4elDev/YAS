@@ -49,15 +49,33 @@ export function TreinosLista({ treinos }: { treinos: Treino[] }) {
       onValueChange={(v) => setFiltro(v as Filtro)}
       className="flex flex-col gap-5"
     >
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="todos" className="min-h-11">
-          Todos ({contagem.todos})
+      <TabsList className="grid !h-auto w-full grid-cols-3 p-1">
+        <TabsTrigger
+          value="todos"
+          className="!h-auto min-h-11 min-w-0 flex-col gap-0.5 px-1 py-1.5 text-[13px] leading-tight sm:text-sm"
+        >
+          <span>Todos</span>
+          <span className="text-xs font-semibold tabular-nums">
+            {contagem.todos}
+          </span>
         </TabsTrigger>
-        <TabsTrigger value="pendente" className="min-h-11">
-          Pendentes ({contagem.pendente})
+        <TabsTrigger
+          value="pendente"
+          className="!h-auto min-h-11 min-w-0 flex-col gap-0.5 px-1 py-1.5 text-[13px] leading-tight sm:text-sm"
+        >
+          <span>Pendentes</span>
+          <span className="text-xs font-semibold tabular-nums">
+            {contagem.pendente}
+          </span>
         </TabsTrigger>
-        <TabsTrigger value="concluido" className="min-h-11">
-          Concluídos ({contagem.concluido})
+        <TabsTrigger
+          value="concluido"
+          className="!h-auto min-h-11 min-w-0 flex-col gap-0.5 px-1 py-1.5 text-[13px] leading-tight sm:text-sm"
+        >
+          <span>Concluídos</span>
+          <span className="text-xs font-semibold tabular-nums">
+            {contagem.concluido}
+          </span>
         </TabsTrigger>
       </TabsList>
       <TabsContent value={filtro} className="flex flex-col gap-3">
