@@ -47,7 +47,7 @@ export function TreinosLista({ treinos }: { treinos: Treino[] }) {
     <Tabs
       value={filtro}
       onValueChange={(v) => setFiltro(v as Filtro)}
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-4"
     >
       <TabsList className="grid !h-auto w-full grid-cols-3 p-1">
         <TabsTrigger

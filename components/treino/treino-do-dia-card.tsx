@@ -17,30 +17,31 @@ export function TreinoDoDiaCard({
   return (
     <Link
       href={`/aluno/treinos/${treino.id}`}
-      className="aluno-tap relative flex flex-col gap-6 overflow-hidden rounded-3xl bg-primary p-6 text-primary-foreground"
+      className="aluno-tap relative flex flex-col gap-5 overflow-hidden rounded-3xl bg-primary p-5 text-primary-foreground sm:gap-6 sm:p-6"
     >
-      <div className="relative flex flex-col gap-1">
-        <div className="flex items-center justify-between gap-3">
-          <span className="min-w-0 text-xs font-semibold tracking-[0.12em] text-primary-foreground/80 uppercase">
-            {concluido ? "Treino de hoje · concluído" : "Treino de hoje"}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 flex-col gap-2">
+          <span className="text-[11px] font-bold tracking-[0.14em] text-primary-foreground/80 uppercase">
+            {concluido ? "Hoje · concluído" : "Treino de hoje"}
           </span>
-          <YasFace
-            rosto="feliz-orgulhosa"
-            size={56}
-            className="pointer-events-none sm:size-20!"
-          />
+          <span className="text-2xl leading-tight font-bold tracking-tight break-words text-balance sm:text-3xl">
+            {treino.nome}
+          </span>
+          {totalExercicios > 0 ? (
+            <span className="text-sm text-primary-foreground/80 tabular-nums">
+              {totalExercicios}{" "}
+              {totalExercicios === 1 ? "exercício" : "exercícios"}
+            </span>
+          ) : null}
         </div>
-        <span className="text-2xl leading-tight font-bold tracking-tight break-words text-balance sm:text-3xl">
-          {treino.nome}
-        </span>
-        {totalExercicios > 0 ? (
-          <span className="text-sm text-primary-foreground/80">
-            {totalExercicios} {totalExercicios === 1 ? "exercício" : "exercícios"}
-          </span>
-        ) : null}
+        <YasFace
+          rosto="feliz-orgulhosa"
+          size={48}
+          className="pointer-events-none sm:size-16!"
+        />
       </div>
 
-      <span className="relative flex min-h-13 items-center justify-center gap-2 rounded-2xl bg-primary-foreground text-base font-semibold text-background">
+      <span className="flex min-h-13 items-center justify-center gap-2 rounded-2xl bg-primary-foreground text-base font-semibold text-background">
         <Play aria-hidden className="size-4 fill-current" />
         {concluido ? "Ver treino" : "Começar treino"}
       </span>

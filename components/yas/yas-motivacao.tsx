@@ -9,19 +9,13 @@ import {
   type MensagemYas,
   type PapelYas,
 } from "@/components/yas/mensagens";
-import { cn } from "@/lib/utils";
+import "./yas-motivacao.css";
 
-// Mobile fecha mais rápido: o balão fica sobre o conteúdo e a bottom-nav.
-const TEMPO_DESKTOP_MS = 6000;
-const TEMPO_MOBILE_MS = 4500;
-const TEMPO_SAIDA_MS = 200;
-
-function tempoExibicao(): number {
-  if (typeof window === "undefined") return TEMPO_DESKTOP_MS;
-  return window.matchMedia("(max-width: 1023px)").matches
-    ? TEMPO_MOBILE_MS
-    : TEMPO_DESKTOP_MS;
-}
+const TEMPO_EXIBICAO_MS = 6000;
+// Pequena espera: a página assenta antes da altura ser reservada.
+const ATRASO_ENTRADA_MS = 350;
+// Cobre a transição de altura (280ms) antes de desmontar.
+const TEMPO_SAIDA_MS = 320;
 
 export interface YasMotivacaoProps {
   /** Usuário logado. Recebido para contrato; o componente não busca dados. */
@@ -39,6 +33,11 @@ export interface YasMotivacaoProps {
   suprimir?: boolean;
 }
 
+/**
+ * Recado da Yas. Renderizado DENTRO do conteúdo (ver AppShell): a altura é
+ * reservada no fluxo, então nunca cobre botão, campo ou menu. Dispara só por
+ * mudança de rota (não por re-render, form ou router.refresh).
+ */
 export function YasMotivacao({
   nome,
   papel,
@@ -48,87 +47,114 @@ export function YasMotivacao({
   suprimir = false,
 }: YasMotivacaoProps) {
   const [montado, setMontado] = useState(false);
-  const [visivel, setVisivel] = useState(false);
+  const [aberto, setAberto] = useState(false);
   const [mensagem, setMensagem] = useState<MensagemYas | null>(null);
-  // Último pathname já exibido: StrictMode e re-renders não repetem.
   const exibidoPara = useRef<string | null>(null);
-  const timerFechar = useRef<number | undefined>(undefined);
-  const timerOcultar = useRef<number | undefined>(undefined);
+  const timers = useRef<number[]>([]);
+  // nome/papel só alimentam o sorteio; fora das deps para não reabrir em re-render.
+  const dados = useRef({ nome, papel });
+  useEffect(() => {
+    dados.current = { nome, papel };
+  }, [nome, papel]);
+
+  function limparTimers() {
+    timers.current.forEach((t) => window.clearTimeout(t));
+    timers.current = [];
+  }
 
   function fechar() {
-    window.clearTimeout(timerFechar.current);
-    setVisivel(false);
-    window.clearTimeout(timerOcultar.current);
-    timerOcultar.current = window.setTimeout(() => setMontado(false), TEMPO_SAIDA_MS);
+    limparTimers();
+    setAberto(false);
+    timers.current.push(
+      window.setTimeout(() => setMontado(false), TEMPO_SAIDA_MS)
+    );
   }
 
   useEffect(() => {
     if (suprimir || exibidoPara.current === path) return;
     exibidoPara.current = path;
-    setMensagem(sortearMensagem(papel, nome));
-    setMontado(true);
-    // Sem cleanup de propósito: StrictMode roda o efeito duas vezes e a
-    // segunda chamada retorna cedo; cancelar aqui deixaria o balão invisível.
-    // Entrada no frame seguinte, para a transição de opacidade/translate rodar.
-    window.requestAnimationFrame(() => setVisivel(true));
-    window.clearTimeout(timerFechar.current);
-    timerFechar.current = window.setTimeout(fechar, tempoExibicao());
-  }, [path, suprimir, papel, nome]);
+    limparTimers();
+    timers.current.push(
+      window.setTimeout(() => {
+        setMensagem(sortearMensagem(dados.current.papel, dados.current.nome));
+        setMontado(true);
+        // Frame seguinte: a transição parte do estado fechado.
+        window.requestAnimationFrame(() =>
+          window.requestAnimationFrame(() => setAberto(true))
+        );
+        timers.current.push(window.setTimeout(fechar, TEMPO_EXIBICAO_MS));
+      }, ATRASO_ENTRADA_MS)
+    );
+    return () => {
+      // Cleanup libera o guard: StrictMode (monta/desmonta/monta) agenda de novo.
+      limparTimers();
+      exibidoPara.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path, suprimir]);
 
   useEffect(() => {
-    if (!visivel) return;
+    if (!aberto) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") fechar();
+      if (e.key !== "Escape" || e.defaultPrevented) return;
+      // Dialog/sheet aberto tem prioridade sobre o Escape.
+      if (document.querySelector('[role="dialog"]')) return;
+      fechar();
     }
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [visivel]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aberto]);
 
   if (suprimir || !montado) return null;
 
   return (
     <div
-      role="status"
-      aria-live="polite"
-      className={cn(
-        // Topo no mobile (não cobre 'Finalizar treino' nem inputs); canto inferior direito no desktop.
-        "fixed inset-x-4 top-[calc(4.75rem+env(safe-area-inset-top))] z-40 mx-auto flex max-w-sm items-center gap-3 rounded-2xl border border-border bg-primary p-3 pr-2 text-primary-foreground shadow-lg",
-        "lg:inset-x-auto lg:top-auto lg:right-8 lg:bottom-8 lg:max-w-xs",
-        // Só o balão recebe ponteiro: o resto da tela segue clicável.
-        "transition-[opacity,translate] duration-200 ease-[var(--ease-out)] motion-reduce:translate-y-0",
-        visivel
-          ? "pointer-events-auto translate-y-0 opacity-100"
-          : "pointer-events-none -translate-y-1.5 opacity-0 lg:translate-y-1.5"
-      )}
+      className="yas-aviso"
+      data-aberto={aberto}
+      // Fechando: sai da ordem de foco e do alcance do ponteiro.
+      inert={!aberto}
+      onFocus={() => {
+        // Quem navega por teclado/leitor não perde o recado por timeout.
+        limparTimers();
+      }}
     >
-      <div className="flex size-14 shrink-0 items-center justify-center">
-        {src ? (
-          <Image
-            src={src}
-            alt=""
-            width={56}
-            height={56}
-            unoptimized
-            className="size-14 object-cover"
-          />
-        ) : (
-          <YasFace rosto={rosto ?? mensagem?.rosto} size={56} />
-        )}
+      <div className="yas-aviso-miolo">
+        <div className="yas-aviso-recuo">
+          <div role="status" aria-live="polite" className="yas-aviso-card">
+            <div className="flex size-12 shrink-0 items-center justify-center">
+              {src ? (
+                <Image
+                  src={src}
+                  alt=""
+                  width={48}
+                  height={48}
+                  unoptimized
+                  className="size-12 rounded-full object-cover"
+                />
+              ) : (
+                <YasFace rosto={rosto ?? mensagem?.rosto} size={48} />
+              )}
+            </div>
+            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="text-[11px] font-bold tracking-[0.12em] text-primary uppercase">
+                Yas
+              </span>
+              <p className="text-sm leading-snug font-medium text-foreground">
+                {mensagem?.texto}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={fechar}
+              aria-label="Fechar recado da Yas"
+              className="flex size-11 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-[transform,background-color] duration-150 ease-out active:scale-95 active:bg-muted motion-reduce:transition-none"
+            >
+              <X aria-hidden className="size-5" />
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className="text-[11px] font-bold tracking-[0.12em] uppercase">
-          Yas
-        </span>
-        <p className="text-sm leading-snug font-medium">{mensagem?.texto}</p>
-      </div>
-      <button
-        type="button"
-        onClick={fechar}
-        aria-label="Fechar recado da Yas"
-        className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary-foreground/15 transition-transform duration-150 ease-out active:scale-95"
-      >
-        <X aria-hidden className="size-5" />
-      </button>
     </div>
   );
 }

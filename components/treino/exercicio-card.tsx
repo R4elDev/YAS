@@ -28,7 +28,7 @@ export function ExercicioCard({
   return (
     <article
       className={cn(
-        "flex flex-col gap-4 rounded-2xl border p-4 transition-colors duration-200",
+        "flex flex-col gap-4 rounded-2xl border p-4 transition-colors duration-200 motion-reduce:transition-none",
         concluido ? "border-primary/60 bg-primary/5" : "border-border bg-card"
       )}
     >
@@ -37,13 +37,14 @@ export function ExercicioCard({
           nome={exercicio.nome}
           imagemUrl={exercicio.imagem_url}
           imagemFimUrl={exercicio.imagem_fim_url}
+          tamanho="lg"
         />
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <h3 className="text-base leading-snug font-bold text-balance">
+          <h3 className="text-base leading-snug font-bold break-words text-balance">
             {exercicio.nome}
           </h3>
-          <span className="w-fit rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground tabular-nums">
-            {exercicio.series} × {exercicio.repeticoes} reps
+          <span className="w-fit rounded-full bg-muted px-3 py-1 text-sm font-semibold text-foreground tabular-nums">
+            {exercicio.series} séries × {exercicio.repeticoes}
           </span>
           {exercicio.observacoes ? (
             <p className="text-xs leading-relaxed text-muted-foreground">
@@ -54,7 +55,7 @@ export function ExercicioCard({
       </div>
 
       <div className="flex items-end gap-3">
-        <div className="flex flex-1 flex-col gap-1.5">
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <Label htmlFor={cargaId} className="text-xs text-muted-foreground">
             Carga (kg)
           </Label>
@@ -76,7 +77,7 @@ export function ExercicioCard({
         <label
           htmlFor={concluidoId}
           className={cn(
-            "aluno-tap flex min-h-12 min-w-28 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl border px-4 text-sm font-semibold transition-colors duration-200",
+            "aluno-tap flex min-h-12 min-w-28 shrink-0 select-none cursor-pointer items-center justify-center gap-2 rounded-xl border px-4 text-sm font-semibold transition-colors duration-200",
             concluido
               ? "border-primary bg-primary text-primary-foreground"
               : "border-input bg-background text-foreground"

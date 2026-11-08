@@ -11,7 +11,7 @@
 /* Marcador lateral de status do treino (concluído x pendente) */
 .aluno-barra-status {
   width: 4px;
-  height: 2.25rem;
+  min-height: 2.5rem;
   border-radius: 999px;
   flex-shrink: 0;
 }

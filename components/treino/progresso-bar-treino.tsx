@@ -1,5 +1,3 @@
-import { Progress, ProgressTrack, ProgressIndicator } from "@/components/ui/progress";
-
 export function ProgressoBarTreino({
   concluidos,
   total,
@@ -17,11 +15,19 @@ export function ProgressoBarTreino({
           {concluidos} de {total} {total === 1 ? "exercício" : "exercícios"}
         </span>
       </div>
-      <Progress value={percentual}>
-        <ProgressTrack className="h-2.5">
-          <ProgressIndicator />
-        </ProgressTrack>
-      </Progress>
+      <div
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percentual}
+        aria-label="Exercícios concluídos no treino"
+        className="h-2.5 overflow-hidden rounded-full bg-muted"
+      >
+        <div
+          className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out motion-reduce:transition-none"
+          style={{ width: `${percentual}%` }}
+        />
+      </div>
     </div>
   );
 }

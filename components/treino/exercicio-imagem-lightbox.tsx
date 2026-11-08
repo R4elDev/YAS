@@ -14,19 +14,24 @@ interface ExercicioImagemLightboxProps {
   nome: string;
   imagemUrl: string | null;
   imagemFimUrl: string | null;
+  /** "lg" amplia a miniatura (card do aluno). Padrão preserva o builder. */
+  tamanho?: "md" | "lg";
 }
 
 export function ExercicioImagemLightbox({
   nome,
   imagemUrl,
   imagemFimUrl,
+  tamanho = "md",
 }: ExercicioImagemLightboxProps) {
+  const lado = tamanho === "lg" ? "size-24" : "size-16";
+  const px = tamanho === "lg" ? 96 : 64;
   const [open, setOpen] = useState(false);
   const [etapa, setEtapa] = useState<"inicio" | "fim">("inicio");
 
   if (!imagemUrl) {
     return (
-      <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
+      <div className={cn("flex shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted", lado)}>
         <Dumbbell className="size-6 text-muted-foreground" />
       </div>
     );
@@ -41,18 +46,21 @@ export function ExercicioImagemLightbox({
         type="button"
         onClick={() => setOpen(true)}
         aria-label={`Ampliar imagem de ${nome}`}
-        className="group relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted"
+        className={cn("group relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted", lado)}
       >
         <Image
           src={imagemUrl}
           alt={nome}
-          width={64}
-          height={64}
+          width={px}
+          height={px}
           unoptimized={imagemUrl.endsWith(".gif")}
-          className="size-16 object-cover"
+          className={cn("object-cover", lado)}
         />
-        <span className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-active:bg-black/30">
-          <Expand className="size-4 text-white opacity-0 transition-opacity group-active:opacity-100" />
+        <span
+          aria-hidden
+          className="absolute right-1 bottom-1 flex size-6 items-center justify-center rounded-full bg-black/60 text-white"
+        >
+          <Expand className="size-3.5" />
         </span>
       </button>
 

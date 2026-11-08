@@ -73,12 +73,13 @@ export function AppShell({
           <span className="app-topbar-label">{ROTULO[papel]}</span>
         </header>
         <div id="conteudo" className="app-content">
+          {/* No fluxo: o recado da Yas reserva altura acima da página. */}
+          <YasPopups papel={papel} usuarioId={usuarioId} nome={nome} />
           {children}
         </div>
       </div>
 
       <BottomNav papel={papel} />
-      <YasPopups papel={papel} usuarioId={usuarioId} nome={nome} />
     </div>
   );
 }

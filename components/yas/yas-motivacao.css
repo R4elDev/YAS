@@ -1,0 +1,57 @@
+/* Aviso da Yas: entra NO FLUXO da página (reserva altura), nunca sobreposto.
+   Altura via grid 0fr -> 1fr; opacity/translate suavizam. Dono: Brisa (mobile aluno). */
+.yas-aviso {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    grid-template-rows 280ms var(--ease-out),
+    opacity 200ms var(--ease-out),
+    transform 280ms var(--ease-out);
+}
+.yas-aviso[data-aberto="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+}
+.yas-aviso-miolo {
+  min-height: 0;
+  overflow: hidden;
+}
+/* Mesmo respiro lateral do .yas-page para alinhar com o conteúdo */
+.yas-aviso-recuo {
+  padding: 12px 16px 0;
+}
+@media (min-width: 640px) {
+  .yas-aviso-recuo {
+    padding: 16px 24px 0;
+  }
+}
+@media (min-width: 1024px) {
+  .yas-aviso-recuo {
+    padding: 24px 48px 0;
+  }
+}
+.yas-aviso-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 28rem;
+  padding: 10px 6px 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--primary) 38%, var(--border));
+  border-radius: 20px;
+  background: var(--card);
+}
+@media (max-width: 359px) {
+  .yas-aviso-card {
+    gap: 10px;
+    padding-left: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .yas-aviso {
+    transform: none;
+    transition: opacity 120ms linear;
+  }
+}
