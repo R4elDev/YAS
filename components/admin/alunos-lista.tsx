@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Search, UserPlus } from "lucide-react";
 import type { Profile } from "@/lib/types/database.types";
-import { AlunoListItem } from "@/components/admin/aluno-list-item";
+import { AlunoListItem, type AlunoResumo } from "@/components/admin/aluno-list-item";
 import { YasFace } from "@/components/yas/yas-face";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,9 +23,11 @@ function normalizar(texto: string) {
 
 export function AlunosLista({
   alunos,
+  resumos,
   vazioComAcao = true,
 }: {
   alunos: Profile[];
+  resumos?: Record<string, AlunoResumo>;
   vazioComAcao?: boolean;
 }) {
   const [busca, setBusca] = useState("");
@@ -41,6 +43,12 @@ export function AlunosLista({
       );
     });
   }, [alunos, busca, filtro]);
+
+  const contagem: Record<Filtro, number> = {
+    todos: alunos.length,
+    ativos: alunos.filter((a) => a.ativo).length,
+    inativos: alunos.filter((a) => !a.ativo).length,
+  };
 
   if (alunos.length === 0) {
     return (
@@ -62,7 +70,7 @@ export function AlunosLista({
 
   return (
     <div className="yas-stack">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="pa-toolbar">
         <div className="relative w-full sm:max-w-sm">
           <Search
             className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground"
@@ -87,18 +95,21 @@ export function AlunosLista({
               aria-pressed={filtro === f.id}
               onClick={() => setFiltro(f.id)}
             >
-              {f.label}
+              {f.label}{" "}
+              <span className="tabular-nums opacity-70">{contagem[f.id]}</span>
             </button>
           ))}
         </div>
       </div>
 
       {visiveis.length > 0 ? (
-        <div className="yas-grid">
+        <ul className="pa-list">
           {visiveis.map((aluno) => (
-            <AlunoListItem key={aluno.id} aluno={aluno} />
+            <li key={aluno.id}>
+              <AlunoListItem aluno={aluno} resumo={resumos?.[aluno.id]} />
+            </li>
           ))}
-        </div>
+        </ul>
       ) : (
         <div className="yas-empty pb-6" role="status">
           <strong>Nenhum aluno encontrado</strong>

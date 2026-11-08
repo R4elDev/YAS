@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+import "../alunos.css";
 import { AlunoForm } from "@/components/admin/aluno-form";
 
 export default function NovoAlunoPage() {
   return (
-    <main className="yas-page">
-      <Link
-        href="/admin/alunos"
-        className="inline-flex min-h-11 w-fit items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
-      >
+    <main className="yas-page personal-alunos">
+      <Link href="/admin/alunos" className="pa-back">
         <ChevronLeft className="size-4" aria-hidden />
         Alunos
       </Link>
@@ -20,6 +18,11 @@ export default function NovoAlunoPage() {
             <p>Uma senha provisória é gerada. O aluno troca no primeiro acesso.</p>
           </div>
         </header>
+        <ol className="pa-steps yas-card yas-card-pad">
+          <li><b>1</b> Informe nome e email do aluno.</li>
+          <li><b>2</b> Copie a senha provisória que aparece em seguida.</li>
+          <li><b>3</b> Repasse ao aluno — ele troca no primeiro acesso.</li>
+        </ol>
         <AlunoForm />
       </div>
     </main>

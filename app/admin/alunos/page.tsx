@@ -3,6 +3,8 @@ import { Plus, UserPlus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { listAlunos } from "@/lib/queries/profiles";
 import { listTodosTreinosComAluno } from "@/lib/queries/treinos";
+import "./alunos.css";
+import type { AlunoResumo } from "@/components/admin/aluno-list-item";
 import { AlunosLista } from "@/components/admin/alunos-lista";
 import { Button } from "@/components/ui/button";
 
@@ -17,22 +19,39 @@ export default async function AdminAlunosPage() {
   const concluidos = treinos.filter((t) => t.status === "concluido").length;
   const pendentes = treinos.length - concluidos;
 
+  const resumos: Record<string, AlunoResumo> = {};
+  for (const t of treinos) {
+    const r = (resumos[t.aluno_id] ??= {
+      pendentes: 0,
+      concluidos: 0,
+      ultimoTreino: null,
+    });
+    if (t.status === "concluido") r.concluidos++;
+    else r.pendentes++;
+    if (!r.ultimoTreino || t.data > r.ultimoTreino) r.ultimoTreino = t.data;
+  }
+
+  // listTodosTreinosComAluno traz no máximo 100 registros (os mais recentes).
+  // Ao atingir o limite, os números de treino são um recorte, não o total.
+  const recorte = treinos.length >= 100;
+  const sufixo = recorte ? " (últimos 100 treinos)" : "";
+
   const resumo = [
     { valor: alunos.length, rotulo: "Alunos" },
     { valor: ativos, rotulo: "Ativos" },
-    { valor: pendentes, rotulo: "Treinos pendentes" },
-    { valor: concluidos, rotulo: "Treinos concluídos" },
+    { valor: pendentes, rotulo: `Treinos pendentes${sufixo}` },
+    { valor: concluidos, rotulo: `Treinos concluídos${sufixo}` },
   ];
 
   return (
-    <main className="yas-page">
+    <main className="yas-page personal-alunos">
       <header className="yas-page-header">
         <div>
           <p className="yas-kicker">Área do personal</p>
           <h1>Alunos</h1>
           <p>Veja quem está treinando, crie treinos e acompanhe a evolução de cada um.</p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex w-full flex-wrap gap-2 sm:w-auto">
           <Button
             variant="outline"
             size="lg"
@@ -66,7 +85,13 @@ export default async function AdminAlunosPage() {
         <h2 id="titulo-alunos" className="yas-section-title">
           Seus alunos
         </h2>
-        <AlunosLista alunos={alunos} />
+        {recorte ? (
+          <p className="text-xs text-muted-foreground">
+            Pendentes, concluídos e último treino de cada aluno consideram apenas
+            os 100 treinos mais recentes de todos os alunos.
+          </p>
+        ) : null}
+        <AlunosLista alunos={alunos} resumos={resumos} />
       </section>
     </main>
   );

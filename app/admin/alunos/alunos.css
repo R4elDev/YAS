@@ -1,0 +1,51 @@
+/* Escopo: área do personal › alunos. Só tokens do tema; sem hex solto. */
+.personal-alunos .pa-toolbar { display: flex; flex-direction: column; gap: 12px; }
+@media (min-width: 640px) { .personal-alunos .pa-toolbar { flex-direction: row; align-items: center; justify-content: space-between; } }
+
+.personal-alunos .pa-list { display: grid; gap: 10px; list-style: none; margin: 0; padding: 0; }
+.personal-alunos .pa-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px 12px;
+  min-height: 72px; padding: 12px 14px;
+  transition: transform 160ms var(--ease-out);
+}
+.personal-alunos .pa-row:active { transform: scale(0.985); }
+.personal-alunos .pa-who { display: flex; min-width: 0; align-items: center; gap: 12px; }
+.personal-alunos .pa-name { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; font-weight: 700; }
+.personal-alunos .pa-email { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--muted-foreground); }
+.personal-alunos .pa-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; grid-column: 1 / -1; margin: 0; font-size: 12px; color: var(--muted-foreground); }
+.personal-alunos .pa-meta b { color: var(--foreground); font-weight: 650; font-variant-numeric: tabular-nums; }
+.personal-alunos .pa-end { display: flex; align-items: center; gap: 8px; }
+.personal-alunos .pa-row:focus-visible { outline: 2px solid var(--ring, var(--primary)); outline-offset: 2px; }
+
+@media (min-width: 1024px) {
+  .personal-alunos .pa-list { gap: 0; border: 1px solid var(--border); border-radius: 1.25rem; overflow: hidden; background: var(--card); }
+  .personal-alunos .pa-row { grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.6fr) auto; border: 0; border-radius: 0; box-shadow: none; min-height: 64px; }
+  .personal-alunos .pa-list > li + li > .pa-row { border-top: 1px solid var(--border); }
+  .personal-alunos .pa-who { grid-column: 1; }
+  .personal-alunos .pa-meta { grid-column: 2; grid-row: 1; flex-wrap: nowrap; gap: 16px; white-space: nowrap; }
+  .personal-alunos .pa-end { grid-column: 3; grid-row: 1; }
+  .personal-alunos .pa-row:active { transform: none; }
+  .personal-alunos .pa-row:focus-visible { outline-offset: -2px; }
+}
+
+.personal-alunos .pa-back { display: inline-flex; min-height: 44px; width: fit-content; align-items: center; gap: 4px; font-size: 14px; color: var(--muted-foreground); }
+.personal-alunos .pa-back:hover { color: var(--foreground); }
+
+.personal-alunos .pa-profile { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+.personal-alunos .pa-profile-main { flex: 1 1 200px; min-width: 0; }
+.personal-alunos .pa-profile h1 { overflow-wrap: anywhere; font-size: clamp(22px, 5vw, 30px); font-weight: 650; letter-spacing: -0.03em; line-height: 1.15; }
+.personal-alunos .pa-profile .pa-email { white-space: normal; overflow-wrap: anywhere; font-size: 13px; }
+.personal-alunos .pa-anchors { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.personal-alunos .pa-anchors::-webkit-scrollbar { display: none; }
+
+.personal-alunos .pa-treino { display: flex; min-height: 56px; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; }
+.personal-alunos .pa-treino > span:first-child { min-width: 0; }
+.personal-alunos .pa-treino strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+.personal-alunos .pa-treino small { font-size: 12px; color: var(--muted-foreground); }
+.personal-alunos .pa-treino:focus-visible { outline: 2px solid var(--ring, var(--primary)); outline-offset: 2px; }
+
+.personal-alunos .pa-steps { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--muted-foreground); }
+.personal-alunos .pa-steps li { display: flex; gap: 10px; align-items: flex-start; }
+.personal-alunos .pa-steps b { display: inline-grid; flex: none; width: 22px; height: 22px; place-items: center; border-radius: 999px; background: var(--primary); color: var(--primary-foreground); font-size: 12px; }
+
+@media (prefers-reduced-motion: reduce) { .personal-alunos .pa-row { transition: none; } }
