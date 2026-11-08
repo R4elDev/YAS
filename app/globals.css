@@ -491,5 +491,8 @@ html:has(.app-shell) ::selection { background: var(--primary); color: #fff; }
 
 /* Entrada de página: só opacidade/translate curtos, dado legível desde o 1º frame */
 @keyframes yas-page-in { from { opacity: 0.6; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-.yas-page-enter { animation: yas-page-in 180ms var(--ease-out) both; }
+.yas-page-enter { animation: yas-page-in 180ms var(--ease-out) backwards; }
+/* O loader é position:fixed. Animação de transform (mesmo com fill 'forwards'/'both')
+   faz o wrapper virar containing block e o loader centraliza no wrapper, não na viewport. */
+.yas-page-enter:has(.yas-loader) { animation: none; }
 @media (prefers-reduced-motion: reduce) { .yas-page-enter { animation: none; } }
