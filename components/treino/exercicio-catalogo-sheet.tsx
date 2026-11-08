@@ -152,7 +152,7 @@ export function ExercicioCatalogoSheet({
                   setItens([]);
                 }}
                 className={cn(
-                  "shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors",
+                  "min-h-11 shrink-0 rounded-full border px-3.5 py-2 text-xs font-medium whitespace-nowrap transition-colors",
                   grupoAtivo === grupo
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border text-muted-foreground"
@@ -196,7 +196,7 @@ export function ExercicioCatalogoSheet({
                   key={item.id}
                   type="button"
                   onClick={() => selecionar(item)}
-                  className="flex items-center gap-3 yas-card p-2.5 text-left transition-colors active:bg-accent"
+                  className="flex min-w-0 items-center gap-3 yas-card p-2.5 text-left transition-[background-color,transform] duration-150 ease-out active:scale-[0.985] active:bg-accent"
                 >
                   <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
                     <Image
@@ -224,6 +224,7 @@ export function ExercicioCatalogoSheet({
                 <Button
                   type="button"
                   variant="ghost"
+                  className="h-11 w-full"
                   disabled={carregando}
                   onClick={() =>
                     carregar(busca.trim(), grupoAtivo, pagina + 1)

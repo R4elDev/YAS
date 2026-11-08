@@ -17,6 +17,7 @@ export default async function PerfilAdminPage() {
         <div>
           <p className="yas-kicker">Conta</p>
           <h1>Perfil</h1>
+          <p>Seu nome, foto e acesso ao painel.</p>
         </div>
       </header>
 

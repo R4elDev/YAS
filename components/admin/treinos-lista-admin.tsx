@@ -74,7 +74,7 @@ export function TreinosListaAdmin({ treinos }: { treinos: TreinoComAluno[] }) {
             <button
               key={f.id}
               type="button"
-              className="yas-chip"
+              className="yas-chip min-h-11"
               aria-pressed={filtro === f.id}
               onClick={() => setFiltro(f.id)}
             >
@@ -85,7 +85,7 @@ export function TreinosListaAdmin({ treinos }: { treinos: TreinoComAluno[] }) {
       </div>
 
       {visiveis.length > 0 ? (
-        <div className="yas-grid">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {visiveis.map((treino) => (
             <TreinoAdminCard key={treino.id} treino={treino} />
           ))}

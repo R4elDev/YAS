@@ -78,7 +78,7 @@ export function TreinoAdminCard({ treino }: { treino: TreinoComAluno }) {
       <div className="flex gap-2">
         <Button
           variant="outline"
-          className="flex-1 gap-1.5"
+          className="h-11 min-w-0 flex-1 gap-1.5"
           render={<Link href={`/admin/treinos/${treino.id}/editar`} />}
         >
           <Pencil className="size-4" />
@@ -87,7 +87,9 @@ export function TreinoAdminCard({ treino }: { treino: TreinoComAluno }) {
 
         <Dialog open={dialogAberto} onOpenChange={setDialogAberto}>
           <DialogTrigger
-            render={<Button variant="outline" className="flex-1 gap-1.5" />}
+            render={
+              <Button variant="outline" className="h-11 min-w-0 flex-1 gap-1.5" />
+            }
           >
             <Copy className="size-4" />
             Duplicar

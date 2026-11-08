@@ -219,7 +219,7 @@ export function TreinoBuilder({
             <Button
               type="button"
               variant="outline"
-              className="gap-1.5"
+              className="h-11 gap-1.5"
               onClick={() => setCatalogoAberto(true)}
             >
               <Plus className="size-4" />

@@ -12,8 +12,13 @@ export default async function PerfilAlunoPage() {
   const profile = await getProfile(supabase, user!.id);
 
   return (
-    <main className="flex flex-col gap-8 px-5 pt-8">
-      <h1 className="text-3xl font-semibold tracking-tight">Perfil</h1>
+    <main className="yas-page yas-page-narrow">
+      <header className="yas-page-header">
+        <div>
+          <p className="yas-kicker">Sua conta</p>
+          <h1>Perfil</h1>
+        </div>
+      </header>
 
       <AvatarUpload
         userId={profile.id}
@@ -21,13 +26,13 @@ export default async function PerfilAlunoPage() {
         avatarUrl={profile.avatar_url}
       />
 
-      <div className="flex flex-col gap-4">
+      <section className="yas-card yas-card-pad yas-form">
         <NomeForm nome={profile.nome} />
         <div className="flex flex-col gap-1.5">
           <span className="text-xs text-muted-foreground">Email</span>
-          <p className="text-base">{profile.email}</p>
+          <p className="min-w-0 truncate text-base">{profile.email}</p>
         </div>
-      </div>
+      </section>
 
       <LogoutButton />
     </main>

@@ -84,7 +84,7 @@ export function ExercicioImagemLightbox({
                 type="button"
                 onClick={() => setEtapa("inicio")}
                 className={cn(
-                  "flex-1 rounded-xl border py-2 text-sm font-medium transition-colors",
+                  "min-h-11 flex-1 rounded-xl border py-2 text-sm font-medium transition-colors",
                   etapa === "inicio"
                     ? "border-primary bg-primary/10 text-primary"
                     : "border-border text-muted-foreground"
@@ -96,7 +96,7 @@ export function ExercicioImagemLightbox({
                 type="button"
                 onClick={() => setEtapa("fim")}
                 className={cn(
-                  "flex-1 rounded-xl border py-2 text-sm font-medium transition-colors",
+                  "min-h-11 flex-1 rounded-xl border py-2 text-sm font-medium transition-colors",
                   etapa === "fim"
                     ? "border-primary bg-primary/10 text-primary"
                     : "border-border text-muted-foreground"

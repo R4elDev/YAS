@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, Flame } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getProfile } from "@/lib/queries/profiles";
 import { listTreinosPeriodo, getTreinoComExercicios } from "@/lib/queries/treinos";
 import { getDiasDaSemana, getWeekRange, todayISODate } from "@/lib/utils/date";
 import { TreinoDoDiaCard } from "@/components/treino/treino-do-dia-card";
 import { SemanaDiasRow } from "@/components/treino/semana-dias-row";
+import { YasPose } from "@/components/layout/yas-pose";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 function iniciais(nome: string) {
@@ -36,31 +37,56 @@ export default async function InicioPage() {
     : null;
 
   const concluidos = treinosSemana.filter((t) => t.status === "concluido").length;
+  const percentualSemana =
+    treinosSemana.length > 0
+      ? Math.round((concluidos / treinosSemana.length) * 100)
+      : 0;
   const primeiroNome = profile.nome.split(" ")[0];
 
   return (
-    <main className="flex flex-col gap-6 px-5 pt-8">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex flex-col">
-          <span className="text-sm text-muted-foreground">Bom treino,</span>
-          <h1 className="text-3xl font-semibold tracking-tight">{primeiroNome}</h1>
+    <main className="yas-page">
+      <header className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 flex-col">
+          <p className="yas-kicker">Bom treino</p>
+          <h1 className="truncate text-3xl font-semibold tracking-tight">
+            {primeiroNome}
+          </h1>
         </div>
-        <Avatar className="size-11 border border-border">
+        <Avatar className="size-12 shrink-0 border border-border">
           <AvatarImage src={profile.avatar_url ?? undefined} alt={profile.nome} />
           <AvatarFallback className="font-bold">
             {iniciais(profile.nome)}
           </AvatarFallback>
         </Avatar>
-      </div>
+      </header>
 
       {treinosSemana.length > 0 ? (
-        <div className="yas-card flex items-center gap-2 rounded-full px-4 py-3 text-sm">
-          <Flame className="size-4 text-primary" />
-          <span>
-            <span className="font-bold text-primary">{concluidos}</span> de{" "}
-            {treinosSemana.length} treinos da semana concluídos
-          </span>
-        </div>
+        <section
+          aria-label="Resumo da semana"
+          className="yas-card flex flex-col gap-3 p-4"
+        >
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="text-sm text-muted-foreground">
+              Semana em andamento
+            </span>
+            <span className="text-sm font-semibold tabular-nums">
+              {concluidos} de {treinosSemana.length} concluídos
+            </span>
+          </div>
+          <div
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={percentualSemana}
+            aria-label="Treinos concluídos na semana"
+            className="h-2 overflow-hidden rounded-full bg-muted"
+          >
+            <div
+              className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
+              style={{ width: `${percentualSemana}%` }}
+            />
+          </div>
+        </section>
       ) : null}
 
       {treinoDoDia ? (
@@ -69,20 +95,26 @@ export default async function InicioPage() {
           totalExercicios={treinoDoDia.exercicios.length}
         />
       ) : (
-        <div className="rounded-3xl border border-dashed border-border p-6 text-sm leading-relaxed text-muted-foreground">
-          Nenhum treino atribuído para hoje. Aproveite para descansar e recuperar a energia.
-        </div>
+        <section className="yas-empty">
+          <YasPose
+            pose="alongamento"
+            className="yas-empty-pose"
+            sizes="120px"
+          />
+          <strong>Dia de descanso</strong>
+          <p>Nenhum treino para hoje. Recuperar também faz parte do resultado.</p>
+        </section>
       )}
 
       <section className="flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold">Sua semana</h2>
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="yas-section-title">Sua semana</h2>
           <Link
             href="/aluno/progresso"
-            className="flex items-center gap-1 text-sm font-medium text-primary"
+            className="flex min-h-11 items-center gap-1 text-sm font-medium text-primary"
           >
             Ver progresso
-            <ArrowRight className="size-4" />
+            <ArrowRight aria-hidden className="size-4" />
           </Link>
         </div>
         <SemanaDiasRow dias={dias} treinos={treinosSemana} />

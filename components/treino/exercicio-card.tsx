@@ -2,10 +2,10 @@
 
 import type { Exercicio } from "@/lib/types/database.types";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ExercicioImagemLightbox } from "@/components/treino/exercicio-imagem-lightbox";
 import { cn } from "@/lib/utils";
+import { CircleCheck, Circle } from "lucide-react";
 
 interface ExercicioCardProps {
   exercicio: Exercicio;
@@ -26,10 +26,10 @@ export function ExercicioCard({
   const concluidoId = `concluido-${exercicio.id}`;
 
   return (
-    <div
+    <article
       className={cn(
-        "flex flex-col gap-4 rounded-2xl border p-4 transition-colors",
-        concluido ? "border-primary/60 bg-primary/10" : "border-border bg-card"
+        "flex flex-col gap-4 rounded-2xl border p-4 transition-colors duration-200",
+        concluido ? "border-primary/60 bg-primary/5" : "border-border bg-card"
       )}
     >
       <div className="flex gap-3">
@@ -38,17 +38,17 @@ export function ExercicioCard({
           imagemUrl={exercicio.imagem_url}
           imagemFimUrl={exercicio.imagem_fim_url}
         />
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className="truncate text-base font-bold">
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <h3 className="text-base leading-snug font-bold text-balance">
             {exercicio.nome}
-          </span>
-          <span className="text-sm text-muted-foreground">
-            {exercicio.series} séries x {exercicio.repeticoes} reps
+          </h3>
+          <span className="w-fit rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground tabular-nums">
+            {exercicio.series} × {exercicio.repeticoes} reps
           </span>
           {exercicio.observacoes ? (
-            <span className="text-xs text-muted-foreground">
+            <p className="text-xs leading-relaxed text-muted-foreground">
               {exercicio.observacoes}
-            </span>
+            </p>
           ) : null}
         </div>
       </div>
@@ -64,7 +64,7 @@ export function ExercicioCard({
             inputMode="decimal"
             step="0.5"
             min="0"
-            className="h-12 text-base"
+            className="h-12 text-base tabular-nums"
             defaultValue={carga ?? ""}
             onBlur={(e) => {
               const valor =
@@ -73,23 +73,30 @@ export function ExercicioCard({
             }}
           />
         </div>
-        <div className="flex flex-col gap-1.5">
-          <span aria-hidden className="text-xs text-transparent select-none">
-            Feito
-          </span>
-          <label
-            htmlFor={concluidoId}
-            className="flex h-12 shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-input px-4"
-          >
-            <Checkbox
-              id={concluidoId}
-              checked={concluido}
-              onCheckedChange={(v) => onConcluidoChange(v === true)}
-            />
-            <span className="text-sm font-medium">Feito</span>
-          </label>
-        </div>
+        <label
+          htmlFor={concluidoId}
+          className={cn(
+            "aluno-tap flex min-h-12 min-w-28 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl border px-4 text-sm font-semibold transition-colors duration-200",
+            concluido
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-input bg-background text-foreground"
+          )}
+        >
+          <input
+            id={concluidoId}
+            type="checkbox"
+            className="sr-only"
+            checked={concluido}
+            onChange={(e) => onConcluidoChange(e.target.checked)}
+          />
+          {concluido ? (
+            <CircleCheck aria-hidden className="size-4" />
+          ) : (
+            <Circle aria-hidden className="size-4" />
+          )}
+          {concluido ? "Feito" : "Marcar"}
+        </label>
       </div>
-    </div>
+    </article>
   );
 }

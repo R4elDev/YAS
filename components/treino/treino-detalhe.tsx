@@ -74,6 +74,17 @@ export function TreinoDetalhe({
     });
   }
 
+  if (exercicios.length === 0) {
+    return (
+      <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-border px-6 py-10 text-center">
+        <p className="text-sm font-semibold">Treino sem exercícios</p>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Seu personal ainda não adicionou exercícios a este treino.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <ProgressoBarTreino concluidos={concluidos} total={exercicios.length} />
@@ -91,18 +102,25 @@ export function TreinoDetalhe({
         ))}
       </div>
 
-      <Button
-        size="lg"
-        className="h-14 text-base font-bold"
-        disabled={finalizando || isSaving || jaFinalizado}
-        onClick={handleFinalizar}
-      >
-        {jaFinalizado
-          ? "Treino já concluído"
-          : finalizando
-            ? "Finalizando..."
-            : "Finalizar treino"}
-      </Button>
+      <div className="flex flex-col gap-2">
+        <Button
+          size="lg"
+          className="h-14 w-full text-base font-bold"
+          disabled={finalizando || isSaving || jaFinalizado}
+          onClick={handleFinalizar}
+        >
+          {jaFinalizado
+            ? "Treino já concluído"
+            : finalizando
+              ? "Finalizando..."
+              : "Finalizar treino"}
+        </Button>
+        {!jaFinalizado && concluidos < exercicios.length ? (
+          <p className="text-center text-xs text-muted-foreground">
+            Marque os exercícios feitos antes de finalizar.
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

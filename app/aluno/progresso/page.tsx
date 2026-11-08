@@ -24,26 +24,29 @@ export default async function ProgressoPage() {
   const fotosComUrl = await resolverUrlsFotos(supabase, fotos);
 
   return (
-    <main className="flex flex-col gap-8 px-5 pt-8">
-      <div className="progress-welcome"><div><p className="eyebrow">CADA PASSO CONTA</p><h1 className="text-3xl font-semibold tracking-tight">Meu progresso</h1><p className="mt-3 text-sm text-muted-foreground">Sua jornada merece ser acompanhada.</p></div><YasPose pose="jornada" className="progress-pose" sizes="150px" /></div>
+    <main className="yas-page">
+      <header className="yas-page-header">
+        <div>
+          <p className="yas-kicker">Cada passo conta</p>
+          <h1>Meu progresso</h1>
+          <p>Sua jornada merece ser acompanhada.</p>
+        </div>
+        <YasPose pose="jornada" className="aluno-pose-destaque" sizes="112px" />
+      </header>
 
-      <section className="flex flex-col gap-4">
+      <section className="yas-stack">
         <RegistrarPesoForm />
         <GraficoEvolucao pesoData={pesoData} cargaMap={cargaMap} />
       </section>
 
-      <section className="flex flex-col gap-4">
-        <h2 className="text-sm font-bold tracking-wide text-muted-foreground uppercase">
-          Fotos de evolução
-        </h2>
+      <section className="yas-stack">
+        <h2 className="yas-section-title">Fotos de evolução</h2>
         <UploadFoto alunoId={alunoId} />
         <FotoGaleria fotos={fotosComUrl} />
       </section>
 
-      <section className="flex flex-col gap-4">
-        <h2 className="text-sm font-bold tracking-wide text-muted-foreground uppercase">
-          Histórico de treinos
-        </h2>
+      <section className="yas-stack">
+        <h2 className="yas-section-title">Histórico de treinos</h2>
         <HistoricoTreinosList treinos={historico} />
       </section>
     </main>

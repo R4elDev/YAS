@@ -168,15 +168,15 @@ export function ExercicioFormRow({
           </>
         )}
 
-        <div className="flex flex-1 flex-col gap-2">
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
           {doCatalogo ? (
-            <div className="flex flex-col gap-0.5">
-              <span className="flex items-center gap-1 text-base leading-tight font-bold">
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <span className="flex min-w-0 items-center gap-1 text-base leading-tight font-bold">
                 <BadgeCheck className="size-3.5 shrink-0 text-primary" />
-                {exercicio.nome}
+                <span className="truncate">{exercicio.nome}</span>
               </span>
               {exercicio.musculosPrimarios?.length ? (
-                <span className="text-xs text-muted-foreground">
+                <span className="truncate text-xs text-muted-foreground">
                   {exercicio.musculosPrimarios.join(", ")}
                 </span>
               ) : null}
@@ -199,7 +199,7 @@ export function ExercicioFormRow({
             </div>
           )}
           <div className="flex gap-2">
-            <div className="flex flex-1 flex-col gap-1">
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
               <Label
                 htmlFor={`series-${exercicio.clientId}`}
                 className="text-xs text-muted-foreground"
@@ -216,10 +216,10 @@ export function ExercicioFormRow({
                 onChange={(e) =>
                   onChange({ series: Number(e.target.value) })
                 }
-                className="h-10"
+                className="h-11"
               />
             </div>
-            <div className="flex flex-1 flex-col gap-1">
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
               <Label
                 htmlFor={`repeticoes-${exercicio.clientId}`}
                 className="text-xs text-muted-foreground"
@@ -234,7 +234,7 @@ export function ExercicioFormRow({
                 placeholder="12"
                 value={exercicio.repeticoes}
                 onChange={(e) => onChange({ repeticoes: e.target.value })}
-                className="h-10"
+                className="h-11"
               />
             </div>
           </div>
@@ -245,6 +245,7 @@ export function ExercicioFormRow({
           variant="ghost"
           size="icon"
           onClick={onRemove}
+          aria-label="Remover exercício"
           className="text-destructive"
         >
           <Trash2 className="size-4" />
