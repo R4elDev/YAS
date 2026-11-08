@@ -89,7 +89,7 @@ export function TreinoBuilder({
         catalogoId: item.id,
         nome: item.nome,
         imagem_url: item.gifUrl,
-        imagemFimUrl: null,
+        imagemFimUrl: item.imagemFimUrl,
         series: 3,
         repeticoes: "",
         observacoes: "",

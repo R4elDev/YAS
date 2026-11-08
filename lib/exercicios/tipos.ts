@@ -6,6 +6,8 @@ export interface ItemCatalogoExterno {
   nomeOriginal: string;
   /** Mídia opcional: o catálogo do banco não depende de GIF. */
   gifUrl: string | null;
+  /** Segunda foto (posição final), quando a fonte tem. */
+  imagemFimUrl: string | null;
   musculos: string[];
   equipamento: string | null;
 }

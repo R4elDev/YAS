@@ -55,20 +55,28 @@ export async function buscarCatalogoBanco(
   let q = supabase
     .from("exercicios_catalogo")
     .select(
-      "id, nome, nome_original, musculos_primarios, equipamentos, equipamento, imagem_inicio_url, id_externo",
+      "id, nome, nome_original, musculos_primarios, equipamentos, equipamento, imagem_inicio_url, imagem_fim_url, id_externo",
       { count: "exact" }
     )
-    .eq("fonte", "exercisedb");
+    .in("fonte", ["exercisedb", "free-exercise-db"]);
 
   for (const t of tokensDe(params.busca ?? "")) {
-    q = q.ilike("nome_busca", `%${t}%`);
+    // nome_busca (sem acento) cobre o ExerciseDB; linhas importadas sem ele
+    // (free-exercise-db) ainda casam por nome/nome_original. t é [a-z0-9-].
+    q = q.or(
+      `nome_busca.ilike.%${t}%,nome.ilike.%${t}%,nome_original.ilike.%${t}%`
+    );
   }
   if (params.grupo) {
     // Grupo desconhecido não filtra "tudo": devolve vazio (comportamento anterior).
     if (!Object.hasOwn(GRUPOS_MUSCULARES, params.grupo)) {
       return { itens: [], total: 0, pagina, temMais: false };
     }
-    q = q.overlaps("musculos_primarios", GRUPOS_MUSCULARES[params.grupo]);
+    // ExerciseDB guarda músculos em inglês; free-exercise-db já usa o próprio nome do grupo.
+    q = q.overlaps("musculos_primarios", [
+      params.grupo,
+      ...GRUPOS_MUSCULARES[params.grupo],
+    ]);
   }
 
   const { data, count, error } = await q
@@ -86,6 +94,7 @@ export async function buscarCatalogoBanco(
         nome: r.nome,
         nomeOriginal: r.nome_original,
         gifUrl: midiaDoItem(r),
+        imagemFimUrl: r.imagem_fim_url,
         musculos: r.musculos_primarios.map(traduzirMusculo),
         equipamento: equip ? traduzirEquipamento(equip) : null,
       };
