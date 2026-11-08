@@ -145,7 +145,7 @@ export interface Database {
           nome: string;
           nome_original: string;
           categoria: string;
-          nivel: string;
+          nivel: string | null;
           forca: string | null;
           mecanica: string | null;
           equipamento: string | null;
@@ -155,13 +155,19 @@ export interface Database {
           imagem_inicio_url: string | null;
           imagem_fim_url: string | null;
           created_at: string;
+          fonte: string;
+          id_externo: string | null;
+          partes_corpo: string[];
+          equipamentos: string[];
+          atribuicao: string | null;
+          nome_busca: string;
         };
         Insert: {
           id: string;
           nome: string;
           nome_original: string;
           categoria: string;
-          nivel: string;
+          nivel?: string | null;
           forca?: string | null;
           mecanica?: string | null;
           equipamento?: string | null;
@@ -170,11 +176,17 @@ export interface Database {
           instrucoes?: string[];
           imagem_inicio_url?: string | null;
           imagem_fim_url?: string | null;
+          fonte?: string;
+          id_externo?: string | null;
+          partes_corpo?: string[];
+          equipamentos?: string[];
+          atribuicao?: string | null;
+          nome_busca?: string;
         };
         Update: Partial<{
           nome: string;
           categoria: string;
-          nivel: string;
+          nivel: string | null;
           forca: string | null;
           mecanica: string | null;
           equipamento: string | null;
@@ -183,6 +195,12 @@ export interface Database {
           instrucoes: string[];
           imagem_inicio_url: string | null;
           imagem_fim_url: string | null;
+          fonte: string;
+          id_externo: string | null;
+          partes_corpo: string[];
+          equipamentos: string[];
+          atribuicao: string | null;
+          nome_busca: string;
         }>;
         Relationships: [];
       };
