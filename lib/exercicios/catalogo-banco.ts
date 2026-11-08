@@ -12,16 +12,6 @@ import type { PaginaCatalogo } from "@/lib/exercicios/tipos";
 // 'exercisedb'). RLS: só usuário autenticado ativo lê; nenhuma chamada à
 // ExerciseDB e nenhum service_role aqui.
 
-// Imagem do exercício: a do banco, se houver; senão o GIF público da ExerciseDB
-// derivado do id externo (o catálogo foi importado sem mídia). Só exibição.
-const MIDIA_EXERCISEDB = "https://static.exercisedb.dev/media/";
-function midiaDoItem(r: { imagem_inicio_url: string | null; id_externo: string | null }) {
-  if (r.imagem_inicio_url) return r.imagem_inicio_url;
-  return r.id_externo && /^[A-Za-z0-9]{3,20}$/.test(r.id_externo)
-    ? `${MIDIA_EXERCISEDB}${r.id_externo}.gif`
-    : null;
-}
-
 const TAMANHO_PADRAO = 20;
 const TAMANHO_MAX = 25;
 
@@ -55,14 +45,14 @@ export async function buscarCatalogoBanco(
   let q = supabase
     .from("exercicios_catalogo")
     .select(
-      "id, nome, nome_original, musculos_primarios, equipamentos, equipamento, imagem_inicio_url, imagem_fim_url, id_externo",
+      "id, nome, nome_original, musculos_primarios, equipamentos, equipamento, imagem_inicio_url, imagem_fim_url",
       { count: "exact" }
     )
-    .in("fonte", ["exercisedb", "free-exercise-db"]);
+    .eq("fonte", "free-exercise-db");
 
   for (const t of tokensDe(params.busca ?? "")) {
-    // nome_busca (sem acento) cobre o ExerciseDB; linhas importadas sem ele
-    // (free-exercise-db) ainda casam por nome/nome_original. t é [a-z0-9-].
+    // nome_busca (sem acento) quando preenchido; linhas sem ele ainda casam
+    // por nome/nome_original. t é [a-z0-9-].
     q = q.or(
       `nome_busca.ilike.%${t}%,nome.ilike.%${t}%,nome_original.ilike.%${t}%`
     );
@@ -72,11 +62,7 @@ export async function buscarCatalogoBanco(
     if (!Object.hasOwn(GRUPOS_MUSCULARES, params.grupo)) {
       return { itens: [], total: 0, pagina, temMais: false };
     }
-    // ExerciseDB guarda músculos em inglês; free-exercise-db já usa o próprio nome do grupo.
-    q = q.overlaps("musculos_primarios", [
-      params.grupo,
-      ...GRUPOS_MUSCULARES[params.grupo],
-    ]);
+    q = q.overlaps("musculos_primarios", [params.grupo]);
   }
 
   const { data, count, error } = await q
@@ -93,7 +79,7 @@ export async function buscarCatalogoBanco(
         id: r.id,
         nome: r.nome,
         nomeOriginal: r.nome_original,
-        gifUrl: midiaDoItem(r),
+        gifUrl: r.imagem_inicio_url,
         imagemFimUrl: r.imagem_fim_url,
         musculos: r.musculos_primarios.map(traduzirMusculo),
         equipamento: equip ? traduzirEquipamento(equip) : null,
