@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { midiaVisivel } from "@/lib/exercicios/midia";
 import { ExercicioImagemLightbox } from "@/components/treino/exercicio-imagem-lightbox";
 import { cn } from "@/lib/utils";
 
@@ -57,6 +58,9 @@ export function ExercicioFormRow({
   const inputRef = useRef<HTMLInputElement>(null);
   const [enviando, setEnviando] = useState(false);
   const doCatalogo = Boolean(exercicio.catalogoId) || Boolean(exercicio.externo);
+  // GIFs ficam ocultos; o draft mantém imagem_url original (snapshot preservado).
+  const imagemUrl = midiaVisivel(exercicio.imagem_url);
+  const imagemFimUrl = midiaVisivel(exercicio.imagemFimUrl);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -113,18 +117,18 @@ export function ExercicioFormRow({
 
         {doCatalogo ? (
           // Catálogo sem mídia: nada de quadrado vazio nem botão de ampliar.
-          exercicio.imagem_url ? (
+          imagemUrl ? (
             <ExercicioImagemLightbox
               nome={exercicio.nome}
-              imagemUrl={exercicio.imagem_url}
-              imagemFimUrl={exercicio.imagemFimUrl}
+              imagemUrl={imagemUrl}
+              imagemFimUrl={imagemFimUrl}
             />
           ) : null
-        ) : exercicio.imagem_url ? (
+        ) : imagemUrl ? (
           <div className="relative shrink-0">
             <ExercicioImagemLightbox
               nome={exercicio.nome || "Exercício personalizado"}
-              imagemUrl={exercicio.imagem_url}
+              imagemUrl={imagemUrl}
               imagemFimUrl={null}
             />
             <button
