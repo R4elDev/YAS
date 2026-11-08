@@ -1,31 +1,22 @@
 import { createClient } from "@/lib/supabase/server";
 import { listAlunos } from "@/lib/queries/profiles";
-import { AlunoListItem } from "@/components/admin/aluno-list-item";
+import { AlunosLista } from "@/components/admin/alunos-lista";
 
 export default async function AdminProgressoPage() {
   const supabase = await createClient();
   const alunos = await listAlunos(supabase);
 
   return (
-    <main className="flex flex-col gap-6 px-5 pt-8">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-semibold tracking-tight">Progresso</h1>
-        <p className="text-sm text-muted-foreground">
-          Selecione um aluno para ver a evolução.
-        </p>
-      </div>
+    <main className="yas-page">
+      <header className="yas-page-header">
+        <div>
+          <p className="yas-kicker">Acompanhamento</p>
+          <h1>Progresso</h1>
+          <p>Escolha um aluno para ver peso, cargas, fotos e histórico de treinos.</p>
+        </div>
+      </header>
 
-      <div className="flex flex-col gap-2">
-        {alunos.length > 0 ? (
-          alunos.map((aluno) => (
-            <AlunoListItem key={aluno.id} aluno={aluno} />
-          ))
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            Nenhum aluno cadastrado ainda.
-          </p>
-        )}
-      </div>
+      <AlunosLista alunos={alunos} vazioComAcao={false} />
     </main>
   );
 }

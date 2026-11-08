@@ -11,8 +11,9 @@ function ativo(pathname: string, href: string) {
 }
 
 /** Navegação inferior (mobile/tablet). Escondida em >=1024px pelo CSS. */
-export function BottomNav({ itens }: { itens: NavItem[] }) {
+export function BottomNav({ papel }: { papel: Papel }) {
   const pathname = usePathname();
+  const itens = ITENS_POR_PAPEL[papel];
 
   return (
     <nav className="yas-bottom-nav" aria-label="Navegação principal">

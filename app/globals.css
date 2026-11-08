@@ -290,7 +290,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--primary); outli
 .yas-sidebar-nav a[aria-current="page"] { background: var(--primary); color: var(--primary-foreground); font-weight: 650; }
 .app-sidebar-brand { display: inline-flex; padding: 4px 8px; }
 .app-sidebar-role { margin: 10px 8px 28px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-foreground); }
-.app-sidebar-pose { margin-top: auto; height: 210px; overflow: hidden; display: flex; justify-content: center; align-items: flex-end; pointer-events: none; }
+.app-sidebar-pose { margin-top: auto; flex: 0 1 210px; min-height: 0; overflow: hidden; display: flex; justify-content: center; align-items: flex-end; pointer-events: none; }
 .app-sidebar-pose img { height: 100%; width: auto; object-fit: contain; object-position: bottom; }
 .app-sidebar-user { display: flex; align-items: center; gap: 12px; min-height: 64px; margin-top: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 16px; background: var(--card); transition: border-color 160ms, transform 160ms var(--ease-out); }
 .app-sidebar-user:active { transform: scale(0.98); }
@@ -323,7 +323,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--primary); outli
 .yas-card { border: 1px solid var(--border); background: var(--card); border-radius: 1.25rem; }
 .yas-card-pad { padding: 16px; }
 @media (min-width: 640px) { .yas-card-pad { padding: 20px; } }
-.yas-card-link { display: block; transition: border-color 160ms, background-color 160ms, transform 160ms var(--ease-out); }
+.yas-card-link { transition: border-color 160ms, background-color 160ms, transform 160ms var(--ease-out); }
 .yas-card-link:active { transform: scale(0.985); background: var(--accent); }
 .yas-hero-card { position: relative; overflow: hidden; border-radius: 1.5rem; background: var(--primary); color: var(--primary-foreground); }
 .yas-cream-card { border-radius: 1.5rem; background: var(--cream); color: var(--cream-ink); }

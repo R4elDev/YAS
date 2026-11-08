@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { Search, Dumbbell, PenLine, Loader2, RefreshCw } from "lucide-react";
 import { buscarExerciciosCatalogo } from "@/lib/actions/catalogo-externo";
@@ -15,6 +15,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+const QUERY_DESKTOP = "(min-width: 1024px)";
+
+function useDesktop() {
+  return useSyncExternalStore(
+    (cb) => {
+      const mq = window.matchMedia(QUERY_DESKTOP);
+      mq.addEventListener("change", cb);
+      return () => mq.removeEventListener("change", cb);
+    },
+    () => window.matchMedia(QUERY_DESKTOP).matches,
+    () => false
+  );
+}
 
 interface ExercicioCatalogoSheetProps {
   open: boolean;
@@ -38,6 +52,7 @@ export function ExercicioCatalogoSheet({
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const requisicao = useRef(0);
+  const desktop = useDesktop();
 
   const carregar = useCallback(
     async (termo: string, grupo: string | null, proxima: number) => {
@@ -104,9 +119,13 @@ export function ExercicioCatalogoSheet({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        side="bottom"
-        className="flex flex-col gap-0 rounded-t-3xl p-0"
-        style={{ height: "85vh" }}
+        side={desktop ? "right" : "bottom"}
+        className={cn(
+          "flex flex-col gap-0 p-0",
+          desktop
+            ? "h-full w-[min(560px,100vw)]! max-w-none! rounded-l-3xl"
+            : "h-[88dvh]! rounded-t-3xl"
+        )}
       >
         <SheetHeader className="gap-3 border-b border-border pb-4">
           <SheetTitle>Adicionar exercício</SheetTitle>
@@ -230,7 +249,7 @@ export function ExercicioCatalogoSheet({
           )}
         </div>
 
-        <div className="border-t border-border p-4">
+        <div className="border-t border-border p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
           <Button
             type="button"
             variant="outline"

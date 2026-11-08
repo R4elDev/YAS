@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { listTodosTreinosComAluno } from "@/lib/queries/treinos";
-import { TreinoAdminCard } from "@/components/admin/treino-admin-card";
+import { TreinosListaAdmin } from "@/components/admin/treinos-lista-admin";
 import { Button } from "@/components/ui/button";
 
 export default async function AdminTreinosPage() {
@@ -10,30 +10,24 @@ export default async function AdminTreinosPage() {
   const treinos = await listTodosTreinosComAluno(supabase);
 
   return (
-    <main className="flex flex-col gap-6 px-5 pt-8">
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="text-3xl font-semibold tracking-tight">Treinos</h1>
+    <main className="yas-page">
+      <header className="yas-page-header">
+        <div>
+          <p className="yas-kicker">Área do personal</p>
+          <h1>Treinos</h1>
+          <p>Todos os treinos enviados aos alunos. Edite, duplique para outra data ou exclua.</p>
+        </div>
         <Button
-          size="sm"
-          className="gap-1"
+          size="lg"
+          className="gap-2"
           render={<Link href="/admin/treinos/novo" />}
         >
           <Plus className="size-4" />
           Novo treino
         </Button>
-      </div>
+      </header>
 
-      <div className="flex flex-col gap-3">
-        {treinos.length > 0 ? (
-          treinos.map((treino) => (
-            <TreinoAdminCard key={treino.id} treino={treino} />
-          ))
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            Nenhum treino criado ainda.
-          </p>
-        )}
-      </div>
+      <TreinosListaAdmin treinos={treinos} />
     </main>
   );
 }

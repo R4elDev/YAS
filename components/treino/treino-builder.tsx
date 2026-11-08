@@ -161,8 +161,11 @@ export function TreinoBuilder({
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4">
+    <div className="yas-stack gap-6! lg:gap-8!">
+      <section
+        aria-label="Dados do treino"
+        className="yas-card yas-card-pad grid gap-4 md:grid-cols-2 xl:grid-cols-[1.2fr_1fr_0.8fr]"
+      >
         <div className="flex flex-col gap-2">
           <Label htmlFor="nome-treino">Nome do treino</Label>
           <Input
@@ -205,19 +208,18 @@ export function TreinoBuilder({
             className="h-12 text-base"
           />
         </div>
-      </div>
+      </section>
 
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold tracking-wide text-muted-foreground uppercase">
-            Exercícios
+      <section className="yas-stack" aria-labelledby="titulo-exercicios">
+        <div className="flex items-center justify-between gap-3">
+          <h2 id="titulo-exercicios" className="yas-section-title">
+            Exercícios{exercicios.length > 0 ? ` (${exercicios.length})` : ""}
           </h2>
           {exercicios.length > 0 ? (
             <Button
               type="button"
               variant="outline"
-              size="sm"
-              className="gap-1"
+              className="gap-1.5"
               onClick={() => setCatalogoAberto(true)}
             >
               <Plus className="size-4" />
@@ -232,7 +234,7 @@ export function TreinoBuilder({
           <button
             type="button"
             onClick={() => setCatalogoAberto(true)}
-            className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-border p-8 text-center transition-colors active:bg-accent"
+            className="flex min-h-44 flex-col items-center justify-center gap-2 rounded-3xl border border-dashed border-line-strong p-8 text-center transition-[background-color,transform] duration-150 active:scale-[0.99] active:bg-accent"
           >
             <span className="flex size-11 items-center justify-center rounded-full bg-primary/15 text-primary">
               <Search className="size-5" />
@@ -243,11 +245,11 @@ export function TreinoBuilder({
             </span>
           </button>
         )}
-      </div>
+      </section>
 
       <Button
         size="lg"
-        className="h-14 text-base font-bold"
+        className="h-14 text-base font-bold lg:ml-auto lg:min-w-72"
         disabled={salvando}
         onClick={handleSalvar}
       >

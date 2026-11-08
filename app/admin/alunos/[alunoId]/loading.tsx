@@ -1,5 +1,5 @@
-import { YasLoader } from "@/components/layout/yas-loader";
+import { PageSkeleton } from "@/components/layout/page-skeleton";
 
 export default function Loading() {
-  return <YasLoader />;
+  return <PageSkeleton cards={4} />;
 }

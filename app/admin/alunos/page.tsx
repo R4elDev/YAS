@@ -2,48 +2,72 @@ import Link from "next/link";
 import { Plus, UserPlus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { listAlunos } from "@/lib/queries/profiles";
-import { AlunoListItem } from "@/components/admin/aluno-list-item";
+import { listTodosTreinosComAluno } from "@/lib/queries/treinos";
+import { AlunosLista } from "@/components/admin/alunos-lista";
+import { Button } from "@/components/ui/button";
 
 export default async function AdminAlunosPage() {
   const supabase = await createClient();
-  const alunos = await listAlunos(supabase);
+  const [alunos, treinos] = await Promise.all([
+    listAlunos(supabase),
+    listTodosTreinosComAluno(supabase),
+  ]);
+
+  const ativos = alunos.filter((a) => a.ativo).length;
+  const concluidos = treinos.filter((t) => t.status === "concluido").length;
+  const pendentes = treinos.length - concluidos;
+
+  const resumo = [
+    { valor: alunos.length, rotulo: "Alunos" },
+    { valor: ativos, rotulo: "Ativos" },
+    { valor: pendentes, rotulo: "Treinos pendentes" },
+    { valor: concluidos, rotulo: "Treinos concluídos" },
+  ];
 
   return (
-    <main className="flex flex-col gap-6 px-5 pt-8">
-      <h1 className="text-3xl font-semibold tracking-tight">Alunos</h1>
-
-      <div className="grid grid-cols-2 gap-3 sm:max-w-md">
-        <Link
-          href="/admin/treinos/novo"
-          className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl bg-primary p-4 text-center text-primary-foreground transition-opacity active:opacity-90"
-        >
-          <Plus className="size-8" />
-          <span className="text-sm leading-tight font-bold">
-            Criar novo treino
-          </span>
-        </Link>
-        <Link
-          href="/admin/alunos/novo"
-          className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card p-4 text-center transition-colors active:bg-accent"
-        >
-          <UserPlus className="size-8 text-muted-foreground" />
-          <span className="text-sm leading-tight font-bold">
+    <main className="yas-page">
+      <header className="yas-page-header">
+        <div>
+          <p className="yas-kicker">Área do personal</p>
+          <h1>Alunos</h1>
+          <p>Veja quem está treinando, crie treinos e acompanhe a evolução de cada um.</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outline"
+            size="lg"
+            className="gap-2"
+            render={<Link href="/admin/alunos/novo" />}
+          >
+            <UserPlus className="size-4" />
             Adicionar aluno
-          </span>
-        </Link>
-      </div>
+          </Button>
+          <Button
+            size="lg"
+            className="gap-2"
+            render={<Link href="/admin/treinos/novo" />}
+          >
+            <Plus className="size-4" />
+            Criar treino
+          </Button>
+        </div>
+      </header>
 
-      <div className="flex flex-col gap-2">
-        {alunos.length > 0 ? (
-          alunos.map((aluno) => (
-            <AlunoListItem key={aluno.id} aluno={aluno} />
-          ))
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            Nenhum aluno cadastrado ainda.
-          </p>
-        )}
-      </div>
+      <section aria-label="Resumo" className="yas-stat-grid yas-rise">
+        {resumo.map((item) => (
+          <div key={item.rotulo} className="yas-card yas-stat">
+            <strong>{item.valor}</strong>
+            <span>{item.rotulo}</span>
+          </div>
+        ))}
+      </section>
+
+      <section className="yas-stack" aria-labelledby="titulo-alunos">
+        <h2 id="titulo-alunos" className="yas-section-title">
+          Seus alunos
+        </h2>
+        <AlunosLista alunos={alunos} />
+      </section>
     </main>
   );
 }

@@ -11,8 +11,14 @@ export default async function NovoTreinoPage() {
   ]);
 
   return (
-    <main className="flex flex-col gap-6 px-5 pt-8">
-      <h1 className="text-3xl font-semibold tracking-tight">Criar treino</h1>
+    <main className="yas-page">
+      <header className="yas-page-header">
+        <div>
+          <p className="yas-kicker">Treinos</p>
+          <h1>Criar treino</h1>
+          <p>Escolha o aluno, a data e monte a sequência de exercícios.</p>
+        </div>
+      </header>
       <TreinoBuilder alunos={alunos} catalogo={catalogo} />
     </main>
   );

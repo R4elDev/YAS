@@ -2,7 +2,7 @@ import Link from "next/link";
 import { YasBrand } from "@/components/layout/yas-brand";
 import { YasPose } from "@/components/layout/yas-pose";
 import { BottomNav, SidebarNav } from "@/components/layout/bottom-nav";
-import { ITENS_POR_PAPEL, type Papel } from "@/components/layout/nav-itens";
+import type { Papel } from "@/components/layout/nav-itens";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const ROTULO: Record<Papel, string> = {
@@ -69,7 +69,7 @@ export function AppShell({ papel, nome, avatarUrl, children }: AppShellProps) {
         </div>
       </div>
 
-      <BottomNav itens={ITENS_POR_PAPEL[papel]} />
+      <BottomNav papel={papel} />
     </div>
   );
 }
